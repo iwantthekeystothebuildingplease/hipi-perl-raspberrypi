@@ -1,0 +1,130 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Class</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_util.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_util_utils.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Class</H2><p>HiPi::Class is a base module used throughout HiPi to provide a base for other OO classes.</p><p>Most long term Perl addicts resort to their own class creation helpers at some point and I am no exception.</p>
+<p>If you are new to Perl, you would be better to investigate the <B>Moose</B> modules as a basis for writing your own OO code, or perhaps even Class::Accessor and friends.</p>
+<p>As the great Burt Bacharach once said, you must learn the rules before you can break them. </p>
+<p>The module is only documented for explanation as it appears throughout the code</p>
+
+
+<h3>Accessor Creation Methods</h3>
+<pre><b>__PACKAGE->creat_accessors( qw( methodname ) );</b>
+
+# creates a read/write accessor
+my $val = $obj->methodname();
+$obj->methodname($val);
+
+
+<b>__PACKAGE->creat_ro_accessors( qw( methodname ) );</b>
+
+# creates a read only accessor
+my $val = $obj->methodname();
+
+
+<b>__PACKAGE->creat_get_accessors( qw( methodname ) );</b>
+
+# creates a read accessor prefixed with 'get_'
+my $val = $obj->get_methodname();
+
+
+<b>__PACKAGE->creat_set_accessors( qw( methodname ) );</b>
+
+# creates a write accessor prefixed with 'set_'
+$obj->set_methodname($val);
+
+
+<b>__PACKAGE->creat_both_accessors( qw( methodname ) );</b>
+
+# calls creat_get_accessors() and creat_set_accessors()
+
+
+NOTE: Capitilised method names produce capitalised
+      accessors without an underscore
+
+<b>__PACKAGE->creat_get_accessors( qw( MethodName ) );</b>
+
+# creates a read accessor prefixed with 'Get'
+my $val = $obj->GetMethodName();
+
+
+<b>__PACKAGE->creat_set_accessors( qw( MethodName ) );</b>
+
+# creates a write accessor prefixed with 'Set'
+$obj->SetMethodName($val);
+</pre>
+<h3>Example Usage</h3>
+<pre>package MyBot; 
+use strict;
+use warnings;
+use parent ( HiPi::Class );
+
+__PACKAGE->creat_accessors( qw( name arms legs winsprize ) );
+
+sub new {
+    my($class, %params) = @_;
+    my $this = $class->SUPER::new(%params);
+    return $this;
+}
+
+package main;
+
+my $mate = MyBot->new( 
+    name => 'Eric',
+    arms => 2,
+    legs => 2
+);
+
+print 'legs ', $mate->legs;
+print 'arms ', $mate->arms;
+
+$mate->winsprize('yes');
+
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_util.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_util_utils.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

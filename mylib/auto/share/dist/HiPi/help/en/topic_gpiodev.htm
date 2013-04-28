@@ -1,0 +1,108 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>GPIO Device Driver</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_w1dev.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_load_drivers_startup.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>GPIO Device Driver</H2><p>The current Raspbian Wheezy Linix distribution provides the Linux gpio kernel device driver that provides access to the Raspberry Pi GPIO pins.<p>
+<p>It does this by providing access to files in the filesystem directory:</p>
+<pre>
+/sys/class/gpio
+</pre>
+<p>The module <A HREF="mod_device_gpio.htm">HiPi::Device::GPIO</A> provides a Perl interface to all of the gpio device driver functions.</p>
+<p>The <A HREF="control_app_gpio_device.htm">HiPi Control GUI Application</A> allows you to set GPIO options using the kernel gpio device driver.</p>
+<p>To control the gpio pins from the command line you can write ascii commands and read values from the control files.</p>
+<p>The kernel documentation for the gpio driver can be read at</p> <pre>http://www.kernel.org/doc/Documentation/gpio.txt</pre>
+<p>In /sys/class/gpio there are two files that allow you to export pins for access and unexport pins to remove access.</p>
+<pre>
+/sys/class/gpio/export
+/sys/class/gpio/unexport</pre>
+<p>To export GPIO Pin 17 so that we can read, write and control the pin, we simply write 17 to the export file:</p>
+<pre>
+sudo sh -c 'echo 27 &gt; /sys/class/gpio/export'</pre>
+<p>With default settings we must use sudo as root permissions are required for the files. Note that we cannot use the following:</p>
+<pre>
+sudo echo 27 &gt; /sys/class/gpio/export</pre>
+<p>The redirection of command output to /sys/class/gpio/export applies to the output of the command, which in this case is 'sudo'. We don't have permissions to write to the file so using sudo here is pointless. The work around is to run a shell ( sh ) under sudo and pass in the whole command including redirection using the -c option.</p>
+<p>Once GPIO pin 17 is exported the following files (or links to files) are created in a new directory, <B>gpio17</B>.</p>
+<pre>
+/sys/class/gpio/gpio17/direction
+/sys/class/gpio/gpio17/value
+/sys/class/gpio/gpio17/edge
+/sys/class/gpio/gpio17/active_low</pre>
+<p>We can set the pin as an input or output by writing either 'in' or 'out' to the <B>direction</B> file. We can also read the file to query the current function of the pin. By default, output pins are configured and set low. Writing 'high' or 'low' to the direction file configures the pin as an output initially set at that level.</p>
+<pre>sudo sh -c 'echo in &gt; /sys/class/gpio/gpio17/direction'</pre>
+<p>We read the state of the pin ( 1 or 0 for high or low) by reading the <B>value</B> file. For pins configured as outputs, we can set the value by writing to the file.</p>
+<pre>
+sudo cat /sys/class/gpio/gpio17/value
+
+sudo sh -c 'echo out &gt; /sys/class/gpio/gpio17/direction'
+sudo sh -c 'echo 1 &gt; /sys/class/gpio/gpio17/value'
+
+<I>... or in a single command ....</I>
+sudo sh -c 'echo high &gt; /sys/class/gpio/gpio17/direction'</pre>
+<p>We can set interrupts by writing to the edge file or read the file to get the current setting. Possible edge settings are <I>none</I>, <I>falling</I>, <I>rising</I>, or <I>both</I>. We check for interrupts by using poll(2) on the value file.</p>
+<pre>
+sudo sh -c 'echo 0 &gt; /sys/class/gpio/gpio17/value'
+sudo sh -c 'echo in &gt; /sys/class/gpio/gpio17/direction'
+sudo sh -c 'echo falling &gt; /sys/class/gpio/gpio17/edge'
+... <I>poll /sys/class/gpio/gpio17/value in some code elsewhere</I></pre>
+<p>We can invert the logic of the value pin for both reading and writing so that a high == 0 and low == 1 by wrting to the active_low file. To invert logic write 1. To revert write 0</p>
+<pre>sudo sh -c 'echo 1 &gt; /sys/class/gpio/gpio17/active_low'</pre>
+<h3>Allowing None Root Device Permissions</h3>
+<p>By default, only root can export and unexport files and write to the gpio pin files. The device manager on Linux is called udev and we can provide rules for udev that control the permissions on the device files that it creates.</p>
+<p>With default settings the files in /sys/class/gpio are owned by user root and group root. Only the root user will have read/write permissions.</p>
+<p>We can change this with a udev rule. We create a file in /etc/udev/rules.d that contains the line:</p>
+<pre>KERNEL=="gpio*", SUBSYSTEM=="gpio", ACTION=="add", PROGRAM="/usr/local/bin/hipi-expin gpio /sys%p"</pre>
+<p>The KERNEL, SUBSYSTEM and ACTION settings define 'matches' that udev should check to determine which device driver and action the rule applies to while the PROGRAM setting provides the path of a program that should be run. The Perl script /usr/local/bin/hipi-expin receives the name of a group and the path to the files that the device driver has created. The script changes the group of the files to the group passed in ( <B>gpio</B> ) and changes the permissions mode of the files to 0660</p>
+<p>With this rule users that are members of the <B>gpio</B> group will be able to read and write from the gpio device files.</p>
+<p>The <A HREF="control_app_spi.htm">HiPi Control GUI application</A> will set or remove this rule for you and allow you to manage the gpio group and device driver options.</p>
+
+
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_w1dev.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_load_drivers_startup.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

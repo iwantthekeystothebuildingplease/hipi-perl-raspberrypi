@@ -1,0 +1,88 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>SPI Device Driver</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_gpiopins_rev1.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_i2cdev.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>SPI Device Driver</H2><p>The SPI kernel device drivers provide access to the BCM2835 spi interface.<p>
+<p>In common with many other device drivers it makes 'files' available in the /dev/ folder of your system that you can write to and read from using <B>ioctl</B> commands.</p>
+<p>The module <A HREF="mod_device_spi.htm">HiPi::Device::SPI</A> supports communication with SPI devices using the kernel device driver.</p> 
+<p>You can have the device drivers loaded at system startup as described in the <A HREF="">Loading Device Drivers Topic.</A></p>
+<p>You can also load the device drivers dynamically with:</p>
+<pre>
+modprobe spi_bcm2708
+modprobe spidev
+</pre>
+<p>The advantage of loading at startup is that you can configure the driver to allow none root users to access the device files. These configuration settings would also apply when using modprobe but your process would need root permissions to run modprobe anyway.</p>
+<h3>Allowing None Root Device Permissions</h3>
+<p>The device manager on Linux is called udev and we can provide rules for udev that control the permissions on the device files that it creates.</p>
+<p>The kernel drivers in Raspbian provide access to the SPI0 peripheral by default. The Raspberry Pi GPIO provides 2 SPI cable select pins and the device driver works by providing a different file for each cable select. You therefore get two device files created for the SPI0 peripheral:</p>
+<pre>
+/dev/spidev0.0
+/dev/spidev0.1
+</pre>
+<p>With default settings these files will be owned by user root and group root. Only the user will have read/write permissions.</p>
+<p>We can change this with a udev rule. We create a file in /etc/udev/rules.d that contains the line:</p>
+<pre>KERNEL=="spidev*", SUBSYSTEM=="spidev", GROUP="spi", MODE="0660"</pre>
+<p>The KERNEL and SUBSYSTEM settings define 'matches' that udev should check to determine which device driver the rule applies to while the GROUP and MODE settings provide the required group and permissions for the created device files.</p>
+<p>With this rule users that are members of the <B>spi</B> group will be able to read and write from the SPI devices.</p>
+<p>The <A HREF="control_app_spi.htm">HiPi Control GUI application</A> will set or remove this rule for you and allow you to manage the spi group and device driver options.</p>
+<h3>Setting Driver Options</h3>
+<p>The SPI driver accepts a single option - bufsiz - which defines the buffer size for SPI communication. It is unlikely that you would need to change the default of 4096.</p>
+<p>If you do need to change it you could specify it as an option to modprobe:</p>
+<pre>
+modprobe spidev bufsiz=8192
+</pre>
+<p>To apply a setting as a default to be used every time the spidev driver is loaded we need to create a file in  /etc/modprobe.d/ that contains the line:</p>
+<pre>
+options spidev bufsiz=8192
+</pre>
+<p>The <A HREF="control_app_spi.htm">HiPi Control GUI application</A> will set or remove this option setting for you and allow you to manage the spi group and device driver udev rules.</p>
+
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_gpiopins_rev1.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_i2cdev.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

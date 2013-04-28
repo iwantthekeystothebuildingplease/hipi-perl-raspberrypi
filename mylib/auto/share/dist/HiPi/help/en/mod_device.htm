@@ -1,0 +1,64 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Device Modules</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+
+<A HREF="interrupt_example_mixed.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_device_gpio.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Device Modules</H2><p>The device modules provide access to the kernel device drivers for various peripherals available on the Raspberry Pi.</p>
+<p>Access to some selected individual componenents is provided by the HiPi::Interface::* modules which provide a higher level interface to the appropriate HiPi::Device::* module</p>
+<p>For example, the MCP23017 chip is a popular port extender that can be used with the Raspberry Pi to give access to 16 further GPIO pins through an i2c connection.</p>
+<p>The module HiPi::Interface::MCP23017 provides a high level interface and uses HiPi::Device::I2C internally to communicate with the chip over the i2c bus</p>
+<p>If you have a component for which there is no HiPi::Interface module you can use the appropriate HiPi:Device::* module directly.</p><p>It would be great if you wrapped your resulting code in a HiPi::Interface::* module and contributed the result to this distribution or directly to CPAN yourself.</p>
+<p>The following five HiPi::Device modules are provided.</p> 
+<p>
+<UL> 
+<LI><A HREF="mod_device_gpio.htm">HiPi::Device::GPIO</A>
+<LI><A HREF="mod_device_i2c.htm">HiPi::Device::I2C</A>
+<LI><A HREF="mod_device_spi.htm">HiPi::Device::SPI</A>
+<LI><A HREF="mod_device_onewire.htm">HiPi::Device::OneWire</A>
+<LI><A HREF="mod_device_serialport.htm">HiPi::Device::SerialPort</A>
+</UL>
+</p></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+
+<A HREF="interrupt_example_mixed.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_device_gpio.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

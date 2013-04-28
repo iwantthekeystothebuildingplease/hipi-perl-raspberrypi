@@ -1,0 +1,82 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Interrupt::Message</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="interrupt.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="interrupt_hipi_interrupt_handler.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="interrupt_example_derived.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Interrupt::Message</H2><p>This module is passed to the message handlers either in a class derived from <A HREF="interrupt_hipi_interrupt_handler.htm">HiPi::Interrupt::Handler</A> or to the callbacks registered with an instance of <A HREF="interrupt_hipi_interrupt_handler.htm">HiPi::Interrupt::Handler</A>.</p>
+<p>An instance of this class provides information for the messages received from the interrupt handler threads.</p>
+<p>After a handler has been created using:</p>
+<p><code>my $handler = HiPi::::Interrupt::HandlerClass->new</code></p>
+<p>The following accessors are available.</p>
+<h3>$msg->action</h3>
+<p>Returns the action that the message is associated with. Possible values are:</p>
+<dl>
+<p><dd><b>add</b>  The message is returned as a result of a call to $handler->add_pin. You can determine which pin by calling $msg->pinid and you can determine success by calling $msg->error.</dd></p>
+<p><dd><b>remove</b>  The message is returned as a result of a call to $handler->remove_pin. You can determine which pin by calling $msg->pinid and you can determine success by calling $msg->error.</dd></p>
+<p><dd><b>interrupt</b>  The message is returned as a result of an interrupt being received by the handler. You can determine which pin by calling $msg->pinid and you can determine success by calling $msg->error.</dd></p>
+<p><dd><b>error</b>  The message is a general error not associated with the response to a particular request. </dd></p>
+<p><dd><b>stop</b>  The message is returned as a result of a call to $handler->stop </dd></p>
+</dl>
+<h3>$msg->error</h3>
+<p>Returns true if there was an error processing an instruction or interrupt, False if the message is the result of a successful instruction. When $msg->error is true then error details are contained in $msg->msgtext.</p>
+<h3>$msg->pinid</h3>
+<p>Returns the BCM GPIO Pin Number associated with the message if any. Returns -1 if the message is not associated with a particular GPIO pin.</p>
+<h3>$msg->value</h3>
+<p>For interrupt messages this contains the value of the pin ( 1 or 0 ) at the time of the interrupt. This means you do not have to read the pin value separately.</p>
+<h3>$msg->timestamp</h3>
+<p>Returns an epoch timestamp in milliseconds for the message.</p>
+<h3>$msg->msgtext</h3>
+<p>May contain text information about the message. When $msg->error is true $msg->msgtext returns the error description.</p>
+<h3>$msg->pinclass</h3>
+<p>Returns the name of the pinclass handler that returned the message.</p>
+<dl>
+<p><dd><b>gpio</b> - Handler for pins managed by kernel sysfs and <A HREF="mod_device_gpio.htm">HiPi::Device::GPIO</A>.</dd></p>
+<p><dd><b>bcmd</b> - Handler for pins managed using <A HREF="mod_gpio_bcm2835.htm">HiPi::BCM2835</A>.</dd></p>
+<p><dd><b>wire</b> - Handler for pins managed using <A HREF="mod_gpio_wiring.htm">HiPi::Wiring</A>.</dd></p>
+</dl></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="interrupt.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="interrupt_hipi_interrupt_handler.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="interrupt_example_derived.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

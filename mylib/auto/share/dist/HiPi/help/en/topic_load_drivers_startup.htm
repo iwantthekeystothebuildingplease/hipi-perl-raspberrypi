@@ -1,0 +1,105 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Loading Drivers at Startup</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_gpiodev.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_i2cbus_2.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Loading Drivers at Startup</H2><p>At your option you can have device drivers for I2C, SPI and 1 Wire loaded at system startup.</p>
+<p>You can, of course, load the device drivers dynamically using <B><I>modprobe</I></B> but you must be running with root ( administrator ) permissions to do so.</p>
+<p>One advantage of loading the device drivers during system startup is that you can configure your system to allow access to the devices for none root users.</p>
+<p>These configuration options would also apply if the device drivers are loaded using modprobe, but the process calling modprobe would need root permissions itself.</p>
+<p>For setting none root permissions on loaded devices see:</p>
+<p>
+<UL> 
+<LI><A HREF="topic_spidev.htm">SPI Device Driver</A>
+<LI><A HREF="topic_i2cdev.htm">I2C Device Driver</A>
+<LI><A HREF="topic_w1dev.htm">W1 Device Driver</A>
+<LI><A HREF="topic_gpiodev.htm">GPIO Device Driver</A>
+</ul></p>
+
+<h3>Removing Blacklist Settings for SPI and I2C</h3>
+<p>The base kernel drivers for I2C and SPI have a blacklist setting in the Raspbian configuration files that prevents them from being loaded automatically (the normal setting). The settings notes that this is because many users don't need them.</p>
+<p> The blacklist configuration file is '/etc/modprobe.d/raspi-blacklist.conf' and you need to edit it if you want to load SPI and/or I2C drivers.</p>
+<p><code>sudo nano /etc/modprobe.d/raspi-blacklist.conf</code></p>
+<p>This will open the file in the nano text editor.</p>
+<p>
+<IMG SRC="nanoblacklist.png" BORDER="0">
+</p>
+<p>Comment out the blacklist lines for the module(s) you wish to have loaded at startup time. In the above example the blacklist setting for both SPI and I2C have been commented out.</p>
+<p>You can save your changes with:</p>
+<pre>
+&lt;Ctrl&gt; X
+Y
+&lt;enter&gt;
+</pre>
+<h3>Configuring Optional Module Load</h3>
+<p>Other modules you may require are never loaded automatically but must be specified in your system configuration files.</p><p>The file you must edit to add any optional modules is '/etc/modules'.</p>
+<p>You should edit this file with:</p>
+<p><code>sudo nano /etc/modules</code></p>
+<p>This will open the file in the nano text editor.</p>
+<p>
+<IMG SRC="nanomodules.png" BORDER="0">
+</p>
+<p>The entry for '<code>snd-bcm2835</code>' should already exist.</p><p>Add the line for '<code>i2c-dev</code>' if you wish to use I2C and the two lines '<code>w1-gpio</code>' and '<code>w1-therm</code>' if you wish to use the kernel 1 Wire driver.</p>
+<p>You can save your changes with:</p>
+<pre>
+&lt;Ctrl&gt; X
+Y
+&lt;enter&gt;
+</pre>
+<p>During your next system startup the selected drivers will be loaded.</p>
+<p>See the individaul driver pages for information on managing permissions on loaded devices.</p>
+
+<p>
+<UL> 
+<LI><A HREF="topic_spidev.htm">SPI Device Driver</A>
+<LI><A HREF="topic_i2cdev.htm">I2C Device Driver</A>
+<LI><A HREF="topic_w1dev.htm">W1 Device Driver</A>
+<LI><A HREF="topic_gpiodev.htm">GPIO Device Driver</A>
+</ul></p>
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_gpiodev.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_i2cbus_2.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

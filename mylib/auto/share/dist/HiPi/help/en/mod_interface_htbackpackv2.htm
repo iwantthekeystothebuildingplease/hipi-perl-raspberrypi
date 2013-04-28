@@ -1,0 +1,159 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Interface::HTBackpackV2</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_htadci2c.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_interface_mcp3004.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Interface::HTBackpackV2</H2><p>HiPi::Interface::HTBackpackV2 provides an implementation of <A HREF="mod_interface_hd44780.htm">HiPi::Interface::HD44780</A> for LCD devices using the HobbyTronics Backpack V2 controller.</p>
+<p>The module inherits many of its methods from <A HREF="mod_interface_hd44780.htm">HiPi::Interface::HD44780</A>.</p>
+<h2>Object Constructor and Methods</h2>
+<pre>
+This module exports the following constants on request for use with
+the inherited 'update_baudrate' method.
+
+    use HiPi::Interface::HTBackpackV2 qw( :htv2baud );
+   
+    # exports constants 
+   
+        HTV2_BAUD_2400
+        HTV2_BAUD_4800 
+        HTV2_BAUD_9600 
+        HTV2_BAUD_14400
+        HTV2_BAUD_19200
+        HTV2_BAUD_28800
+        HTV2_BAUD_57600
+        HTV2_BAUD_115200
+
+The following are the methods specific to this implementation. 
+See <A HREF="mod_interface_hd44780.htm">HiPi::Interface::HD44780</A> for inherited methods.
+</pre>
+<h5>my $lcd = HiPi::Interface::HTBackpackV2->new( %params );</h5>
+<pre>    %params  contains a number of key value pairs
+    
+    Required key value pairs
+      width   =>  $width
+      lines   =>  $lines
+
+    You must specify the geometry of your LCD
+    e.g.
+    my $lcd = HiPi::Interface::HTBackpackV2->new( 
+        width =>  16,
+        lines =>  4,
+    );
+    
+    Optional params and their defaults
+    
+    backlightcontrol => 0
+    
+    specify if methods setting the level of backlight can be used.
+    The method $lcd->backlight will only work if you set
+    backlightcontrol => 1 in the constructor.
+    
+    devicetype =>  'serialrx'
+
+    The Backpack supports two connection types, 'serialrx' and 'i2c'
+    You can specify either - the default is 'serialrx'
+
+    Options and their defaults when devicetype is 'serialrx'
+    
+    devicename      => '/dev/ttyAMA0'
+    baudrate        => 9600
+    parity          => 'none',
+    stopbits        => 1,
+    databits        => 8,
+    
+    Options and their defaults when devicetype is 'i2c'
+    
+    devicename      => ( raspbi board version == 1 ) 
+                       ? '/dev/i2c-0' : '/dev/i2c-1'
+    
+    address         => 0x3A
+
+    Example complete constructor calls:
+    
+    my $lcd = HiPi::Interface::HTBackpackV2->new( 
+        width            => 16,
+        lines            => 4,
+        devicetype       => 'serialrx',
+        backlightcontrol => 1
+    );
+    
+    my $lcd = HiPi::Interface::HTBackpackV2->new( 
+        width            => 16,
+        lines            => 4,
+        devicetype       => 'i2c',
+        address          => 0x3A
+        backlightcontrol => 1
+    );</pre>
+<h5>$lcd->change_i2c_address( $newaddress );</h5>
+<pre>    Change the I2C address if using in i2c mode.
+
+    The i2c address must be in the range 1 - 127 ( 0x01 - 0x7F )</pre>
+<h5>$lcd->send_htv2_command( $command, @params );</h5>
+<pre>    You can use the HobbyTronics Backpack documented commands directly
+    if you wish. The $command param is the backpack command number
+    and you can follow this with any number of parameters required.
+
+    This module exports the following constants on request for use with
+    the the send_htv2_command '$command' parameter.
+
+    use HiPi::Interface::HTBackpackV2 qw( :htv2cmd );
+    
+    HTV2_CMD_PRINT 
+    HTV2_CMD_SET_CURSOR_POS
+    HTV2_CMD_CLEAR_LINE
+    HTV2_CMD_CLEAR_DISPLAY
+    HTV2_CMD_LCD_TYPE
+    HTV2_CMD_HD44780_CMD 
+    HTV2_CMD_BACKLIGHT 
+    HTV2_CMD_WRITE_CHAR
+    HTV2_CMD_I2C_ADDRESS
+    HTV2_CMD_BAUD_RATE
+    HTV2_CMD_CUSTOM_CHAR
+</pre>
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_htadci2c.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_interface_mcp3004.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

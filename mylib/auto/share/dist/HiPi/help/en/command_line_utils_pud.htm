@@ -1,0 +1,75 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi PUD Utility</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="command_line_utils.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="command_line_utils_i2c.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_gpio.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi PUD Utility</H2><p>The <A HREF="mod_gpio_bcm2835.htm">HiPi::BCM2835</A> module provides access to functions that allow you to set the pull up / pull down resistors on the GPIO pins</p>
+<p>The hipi-pud utility is provided to allow access to this facility when not running under sudo and to support the setting of resistors in <A HREF="hipi-device-gpio-pin.htm">HiPi::Device::GPIO::Pin</A></p>
+<p>The calling process user must be a member of the group <B>gpio</B> to execute the utility.</p>
+<p>You can manage group membership with the <A HREF="control_app_gpio_device.htm">HiPi Control Gui</A>.</p>
+<h3>Command Line Help</h3><pre>
+usage : hipi-pud PINID SETTING
+    
+PINID    = bcm2835 gpio pin number
+SETTING  = c[lear] | u[p] | d[own]
+    
+Examples:
+  clear pull up /down resistors for GPIO 24
+    hipi-pud 24 clear
+  
+  set pull up resistor on GPIO 24
+    hipi-pud 24 up
+
+  set pull down resistor on GPIO 24
+    hipi-pud 24 down
+
+Note: PUD settings cannot be read or queried
+      and last across restarts.
+</pre>
+ </FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="command_line_utils.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="command_line_utils_i2c.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_gpio.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

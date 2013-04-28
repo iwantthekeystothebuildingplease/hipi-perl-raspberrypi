@@ -1,0 +1,74 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>SPI Device</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="control-app.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="control_app_i2cdev.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="control_app_w1dev.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>SPI Device</H2><p>To run the Hipi Control GUI</p>
+<p><code>gksudo hipi-control-gui</code></p>
+<p>
+<IMG SRC="controlspidev.png" BORDER="0">
+</p>
+<br />
+<br />
+<p>SPI devices can be accessed using a kernel device driver instead of accessing the appropriate pins directly through /dev/mem. This has the advantage that you can set up the device driver options so that access does not require root permissions.</p>
+<p>This panel allows you to setup and manage the <A HREF="topic_spidev.htm">SPI Device Driver</A> settings</p>
+<p>Check or uncheck the SPI Kernel Modules Loaded checkbox to load and unload the kernel drivers. To permanently skip or load the device drivers at system startup see <A HREF="topic_load_drivers_startup.htm">Loading Device Drivers</A>.</p>
+<p>Access to the SPI devices can be granted to members of the group <I><B>spi</B></I>. The panel provides a simple interface that allows you toggle this option on and off using the 'Allow Group Access' checkbox and also manage group membership.</p>
+<p>You can also set the buffer size used by the SPI driver if you have some special usage that requires a larger buffer than the default.</p>
+<p>Changes to the 'Allow Group Access' and 'bufsiz' settings will persist across system reboots.</p>
+
+
+<p>See Also : </p>
+<pre>
+<A HREF="topic_spidev.htm">SPI Device Driver</A>
+
+<A HREF="topic_load_drivers_startup.htm">Loading Device Drivers</A>
+</pre>
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="control-app.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="control_app_i2cdev.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="control_app_w1dev.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>
