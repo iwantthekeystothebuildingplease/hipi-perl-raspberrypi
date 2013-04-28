@@ -1,0 +1,355 @@
+---
+abstract: 'Raspberry Pi GPIO Modules'
+author:
+  - 'Mark Dootson <mdootson@cpan.org>'
+build_requires: {}
+configure_requires:
+  Module::Build: 0
+  perl: v5.14.0
+dynamic_config: 1
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.110440'
+license: gpl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: HiPi
+no_index:
+  directory:
+    - inc
+    - mylib
+    - BCM2835
+    - Wiring
+    - suidbin
+    - userbin
+provides:
+  HiPi:
+    file: lib/HiPi.pm
+    version: 0.33
+  HiPi::Apps::Control:
+    file: lib/HiPi/Apps/Control.pm
+    version: 0.26
+  HiPi::Apps::Control::Command::GPIO:
+    file: lib/HiPi/Apps/Control/Command/GPIO.pm
+    version: 0.22
+  HiPi::Apps::Control::Constant:
+    file: lib/HiPi/Apps/Control/Constant.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::DeviceGPIO:
+    file: lib/HiPi/Apps/Control/Data/DeviceGPIO.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::DeviceI2C:
+    file: lib/HiPi/Apps/Control/Data/DeviceI2C.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::DeviceSPI:
+    file: lib/HiPi/Apps/Control/Data/DeviceSPI.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::DeviceW1:
+    file: lib/HiPi/Apps/Control/Data/DeviceW1.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::GPIOPAD1:
+    file: lib/HiPi/Apps/Control/Data/GPIOPAD1.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::GPIOPAD5:
+    file: lib/HiPi/Apps/Control/Data/GPIOPAD5.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::Pad:
+    file: lib/HiPi/Apps/Control/Data/Pad.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::PadPin:
+    file: lib/HiPi/Apps/Control/Data/PadPin.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::RInfo:
+    file: lib/HiPi/Apps/Control/Data/RInfo.pm
+    version: 0.22
+  HiPi::Apps::Control::Data::Utils:
+    file: lib/HiPi/Apps/Control/Data/Utils.pm
+    version: 0.22
+  HiPi::Apps::Control::GroupDialog:
+    file: lib/HiPi/Apps/Control/GroupDialog.pm
+    version: 0.22
+  HiPi::Apps::Control::MainPanel:
+    file: lib/HiPi/Apps/Control/MainPanel.pm
+    version: 0.22
+  HiPi::Apps::Control::MainWindow:
+    file: lib/HiPi/Apps/Control/MainWindow.pm
+    version: 0.22
+  HiPi::Apps::Control::Menu::File:
+    file: lib/HiPi/Apps/Control/Menu/File.pm
+    version: 0.22
+  HiPi::Apps::Control::Menu::Help:
+    file: lib/HiPi/Apps/Control/Menu/Help.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::Base:
+    file: lib/HiPi/Apps/Control/Panel/Base.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::Device:
+    file: lib/HiPi/Apps/Control/Panel/Device.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::GPIO1:
+    file: lib/HiPi/Apps/Control/Panel/GPIO1.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::GPIO5:
+    file: lib/HiPi/Apps/Control/Panel/GPIO5.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::GPIODEV:
+    file: lib/HiPi/Apps/Control/Panel/GPIODEV.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::GPIODEV::List:
+    file: lib/HiPi/Apps/Control/Panel/GPIODEV.pm
+    version: 0
+  HiPi::Apps::Control::Panel::GPIODEV::ListValidator:
+    file: lib/HiPi/Apps/Control/Panel/GPIODEV.pm
+    version: 0
+  HiPi::Apps::Control::Panel::I2C:
+    file: lib/HiPi/Apps/Control/Panel/I2C.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::I2C::ApplyValidator:
+    file: lib/HiPi/Apps/Control/Panel/I2C.pm
+    version: 0
+  HiPi::Apps::Control::Panel::I2C::List:
+    file: lib/HiPi/Apps/Control/Panel/I2C.pm
+    version: 0
+  HiPi::Apps::Control::Panel::I2C::ListValidator:
+    file: lib/HiPi/Apps/Control/Panel/I2C.pm
+    version: 0
+  HiPi::Apps::Control::Panel::Pad:
+    file: lib/HiPi/Apps/Control/Panel/Pad.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::Pad::MC:
+    file: lib/HiPi/Apps/Control/Panel/Pad.pm
+    version: 0
+  HiPi::Apps::Control::Panel::Pad::MC::Validator:
+    file: lib/HiPi/Apps/Control/Panel/Pad.pm
+    version: 0
+  HiPi::Apps::Control::Panel::Pad::PinDetail:
+    file: lib/HiPi/Apps/Control/Panel/Pad.pm
+    version: 0
+  HiPi::Apps::Control::Panel::Pad::PinDetail::Validator:
+    file: lib/HiPi/Apps/Control/Panel/Pad.pm
+    version: 0
+  HiPi::Apps::Control::Panel::RInfo:
+    file: lib/HiPi/Apps/Control/Panel/RInfo.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::RInfo::List:
+    file: lib/HiPi/Apps/Control/Panel/RInfo.pm
+    version: 0
+  HiPi::Apps::Control::Panel::RInfo::ListValidator:
+    file: lib/HiPi/Apps/Control/Panel/RInfo.pm
+    version: 0
+  HiPi::Apps::Control::Panel::SPI:
+    file: lib/HiPi/Apps/Control/Panel/SPI.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::SPI::ApplyValidator:
+    file: lib/HiPi/Apps/Control/Panel/SPI.pm
+    version: 0
+  HiPi::Apps::Control::Panel::SPI::List:
+    file: lib/HiPi/Apps/Control/Panel/SPI.pm
+    version: 0
+  HiPi::Apps::Control::Panel::SPI::ListValidator:
+    file: lib/HiPi/Apps/Control/Panel/SPI.pm
+    version: 0
+  HiPi::Apps::Control::Panel::W1:
+    file: lib/HiPi/Apps/Control/Panel/W1.pm
+    version: 0.22
+  HiPi::Apps::Control::Panel::W1::List:
+    file: lib/HiPi/Apps/Control/Panel/W1.pm
+    version: 0
+  HiPi::Apps::Control::Panel::W1::ListValidator:
+    file: lib/HiPi/Apps/Control/Panel/W1.pm
+    version: 0
+  HiPi::Apps::Control::SelectPanel:
+    file: lib/HiPi/Apps/Control/SelectPanel.pm
+    version: 0.22
+  HiPi::BCM2835:
+    file: lib/HiPi/BCM2835.pm
+    version: 0.33
+  HiPi::BCM2835::I2C:
+    file: lib/HiPi/BCM2835/I2C.pm
+    version: 0.27
+  HiPi::BCM2835::Pin:
+    file: lib/HiPi/BCM2835/Pin.pm
+    version: 0.33
+  HiPi::Class:
+    file: lib/HiPi/Class.pm
+    version: 0.20
+  HiPi::Constant:
+    file: lib/HiPi/Constant.pm
+    version: 0.20
+  HiPi::Constant::BoardRev1:
+    file: lib/HiPi/Constant/BoardRev1.pm
+    version: 0.20
+  HiPi::Constant::BoardRev2:
+    file: lib/HiPi/Constant/BoardRev2.pm
+    version: 0.20
+  HiPi::Device:
+    file: lib/HiPi/Device.pm
+    version: 0.20
+  HiPi::Device::GPIO:
+    file: lib/HiPi/Device/GPIO.pm
+    version: 0.33
+  HiPi::Device::GPIO::Pin:
+    file: lib/HiPi/Device/GPIO/Pin.pm
+    version: 0.33
+  HiPi::Device::I2C:
+    file: lib/HiPi/Device/I2C.pm
+    version: 0.33
+  HiPi::Device::OneWire:
+    file: lib/HiPi/Device/OneWire.pm
+    version: 0.21
+  HiPi::Device::SPI:
+    file: lib/HiPi/Device/SPI.pm
+    version: 0.33
+  HiPi::Device::SerialPort:
+    file: lib/HiPi/Device/SerialPort.pm
+    version: 0.22
+  HiPi::Dummy::BCM2835:
+    file: lib/HiPi/Dummy/BCM2835.pm
+    version: 0.20
+  HiPi::Interface:
+    file: lib/HiPi/Interface.pm
+    version: 0.20
+  HiPi::Interface::DS18X20:
+    file: lib/HiPi/Interface/DS18X20.pm
+    version: 0.22
+  HiPi::Interface::HD44780:
+    file: lib/HiPi/Interface/HD44780.pm
+    version: 0.20
+  HiPi::Interface::HTADCI2C:
+    file: lib/HiPi/Interface/HTADCI2C.pm
+    version: 0.20
+  HiPi::Interface::HTBackpackV2:
+    file: lib/HiPi/Interface/HTBackpackV2.pm
+    version: 0.20
+  HiPi::Interface::MCP23017:
+    file: lib/HiPi/Interface/MCP23017.pm
+    version: 0.20
+  HiPi::Interface::MCP3004:
+    file: lib/HiPi/Interface/MCP3004.pm
+    version: 0.20
+  HiPi::Interface::MCP3008:
+    file: lib/HiPi/Interface/MCP3008.pm
+    version: 0.20
+  HiPi::Interface::MCP49XX:
+    file: lib/HiPi/Interface/MCP49XX.pm
+    version: 0.20
+  HiPi::Interface::MPL3115A2:
+    file: lib/HiPi/Interface/MPL3115A2.pm
+    version: 0.26
+  HiPi::Interface::SerLCD:
+    file: lib/HiPi/Interface/SerLCD.pm
+    version: 0.20
+  HiPi::Interrupt:
+    file: lib/HiPi/Interrupt.pm
+    version: 0
+  HiPi::Interrupt::BCM2835:
+    file: lib/HiPi/Interrupt/BCM2835.pm
+    version: 0
+  HiPi::Interrupt::Base:
+    file: lib/HiPi/Interrupt/Base.pm
+    version: 0
+  HiPi::Interrupt::GPIO:
+    file: lib/HiPi/Interrupt/GPIO.pm
+    version: 0
+  HiPi::Interrupt::Handler:
+    file: lib/HiPi/Interrupt/Handler.pm
+    version: 0
+  HiPi::Interrupt::Message:
+    file: lib/HiPi/Interrupt/Message.pm
+    version: 0
+  HiPi::Interrupt::Wiring:
+    file: lib/HiPi/Interrupt/Wiring.pm
+    version: 0
+  HiPi::Language:
+    file: lib/HiPi/Language.pm
+    version: 0.22
+  HiPi::Pin:
+    file: lib/HiPi/Pin.pm
+    version: 0.32
+  HiPi::RaspberryPi:
+    file: lib/HiPi/RaspberryPi.pm
+    version: 0.20
+  HiPi::Utils:
+    file: lib/HiPi/Utils.pm
+    version: 0.33
+  HiPi::Utils::Exec:
+    file: lib/HiPi/Utils/Exec.pm
+    version: 0.33
+  HiPi::Wiring:
+    file: lib/HiPi/Wiring.pm
+    version: 0.33
+  HiPi::Wiring::Pin:
+    file: lib/HiPi/Wiring/Pin.pm
+    version: 0.31
+  HiPi::Wx::App:
+    file: lib/HiPi/Wx/App.pm
+    version: 0.22
+  HiPi::Wx::Common:
+    file: lib/HiPi/Wx/Common.pm
+    version: 0.22
+  HiPi::Wx::Dialog:
+    file: lib/HiPi/Wx/Dialog.pm
+    version: 0.22
+  HiPi::Wx::Frame:
+    file: lib/HiPi/Wx/Frame.pm
+    version: 0.22
+  HiPi::Wx::LogGui:
+    file: lib/HiPi/Wx/LogGui.pm
+    version: 0.27
+  HiPi::Wx::LogGui::LogDialog:
+    file: lib/HiPi/Wx/LogGui.pm
+    version: 0.02
+  HiPi::Wx::LogGui::LogWindowGrid:
+    file: lib/HiPi/Wx/LogGui/LogWindowGrid.pm
+    version: 0.27
+  HiPi::Wx::LogGui::LogWindowGrid::LogLevelRenderer:
+    file: lib/HiPi/Wx/LogGui/LogWindowGrid.pm
+    version: 0
+  HiPi::Wx::LogGui::LogWindowGrid::TimeStampRenderer:
+    file: lib/HiPi/Wx/LogGui/LogWindowGrid.pm
+    version: 0
+  HiPi::Wx::LogGui::LogWindowListCtrl:
+    file: lib/HiPi/Wx/LogGui/LogWindowListCtrl.pm
+    version: 0.27
+  HiPi::Wx::LogGui::Logger:
+    file: lib/HiPi/Wx/LogGui.pm
+    version: 0.01
+  HiPi::Wx::Menu:
+    file: lib/HiPi/Wx/Menu.pm
+    version: 0.22
+  HiPi::Wx::Panel:
+    file: lib/HiPi/Wx/Panel.pm
+    version: 0.22
+  HiPi::Wx::TopLevelWindow:
+    file: lib/HiPi/Wx/TopLevelWindow.pm
+    version: 0.27
+  HiPi::Wx::ValidatedCheckBox:
+    file: lib/HiPi/Wx/ValidatedCheckBox.pm
+    version: 0.22
+  HiPi::Wx::ValidatedCheckBox::Validator:
+    file: lib/HiPi/Wx/ValidatedCheckBox.pm
+    version: 0
+  HiPi::Wx::ValidatedText:
+    file: lib/HiPi/Wx/ValidatedText.pm
+    version: 0.22
+  HiPi::Wx::ValidatedText::Validator:
+    file: lib/HiPi/Wx/ValidatedText.pm
+    version: 0
+  HiPi::Wx::Validator:
+    file: lib/HiPi/Wx/Validator.pm
+    version: 0.22
+  HiPi::Wx::Validator::BoolEnable:
+    file: lib/HiPi/Wx/Validator/BoolEnable.pm
+    version: 0.22
+  HiPi::Wx::Validator::Data:
+    file: lib/HiPi/Wx/Validator/Data.pm
+    version: 0.22
+  HiPi::Wx::Validator::PassThrough:
+    file: lib/HiPi/Wx/Validator/PassThrough.pm
+    version: 0.22
+  HiPi::Wx::Validator::SetValue:
+    file: lib/HiPi/Wx/Validator/SetValue.pm
+    version: 0.22
+resources:
+  homepage: http://raspberry.znix.com/
+  license: http://www.gnu.org/licenses/gpl-3.0.txt
+version: 0.33

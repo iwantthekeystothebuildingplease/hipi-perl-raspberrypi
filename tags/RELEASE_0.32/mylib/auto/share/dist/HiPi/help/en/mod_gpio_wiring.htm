@@ -1,0 +1,178 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Wiring</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_gpio.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_gpio_bcm2835.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="wiringpipatch.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Wiring</H2><p>This module is a thin wrapper around the excellent WiringPi library by Gordon Henderson. You can see full description and examples of using the library at:</p>
+<p><code>https://projects.drogon.net/raspberry-pi/wiringpi/</code></p>
+<p>The HiPi::Wiring module is built against a static build of the wiringPi library. A small patch is applied to the wiringPi source that is discussed here in the <A HREF="wiringpipatch.htm">Wiring Pi Patch note</A>.
+
+<h2>Exported Constants</h2>
+
+<p><code>use HiPi::Wiring qw( :wiring );</code></p>
+
+<p>The following constants are exported by this module under the :wiring tag</p>
+<pre>
+tag :wiring
+
+    WPI_NUM_PINS
+    WPI_MODE_PINS
+    WPI_MODE_GPIO
+    WPI_MODE_GPIO_SYS
+    WPI_MODE_PIFACE
+    WPI_INPUT 
+    WPI_OUTPUT
+    WPI_PWM_OUTPUT
+    WPI_LOW
+    WPI_HIGH
+    WPI_PUD_OFF
+    WPI_PUD_DOWN
+    WPI_PUD_UP
+    WPI_PWM_MODE_MS
+    WPI_PWM_MODE_BAL
+    WPI_NES_RIGHT
+    WPI_NES_LEFT
+    WPI_NES_DOWN
+    WPI_NES_UP
+    WPI_NES_START
+    WPI_NES_SELECT
+    WPI_NES_B
+    WPI_NES_A
+</pre>
+<h2>Wrapped Methods from the WiringPi Libary</h2>
+<pre>
+    HiPi::Wiring::wiringPiSetup()
+    HiPi::Wiring::wiringPiSetupSys()
+    HiPi::Wiring::wiringPiSetupGpio()
+    HiPi::Wiring::wiringPiSetupPiFace()
+    HiPi::Wiring::piBoardRev()
+    HiPi::Wiring::wpiPinToGpio(wpiPin)
+    HiPi::Wiring::wpiPin()
+    HiPi::Wiring::wiringPiSetupPiFaceForGpioProg()
+    HiPi::Wiring::pinMode(pin, mode)
+    HiPi::Wiring::pullUpDnControl(pin, pud)
+    HiPi::Wiring::digitalWrite(pin, value)
+    HiPi::Wiring::digitalWriteByte(value)
+    HiPi::Wiring::pwmWrite(pin, value)
+    HiPi::Wiring::setPadDrive(group, value)
+    HiPi::Wiring::digitalRead(pin)
+    HiPi::Wiring::delayMicroseconds(howLong)
+    HiPi::Wiring::pwmSetMode(mode)
+    HiPi::Wiring::pwmSetRange(range)
+    HiPi::Wiring::pwmSetClock(divisor)
+    HiPi::Wiring::waitForInterrupt(pin, mS)
+    
+    HiPi::Wiring::piLock(key)
+    HiPi::Wiring::piUnlock(key)
+    
+    HiPi::Wiring::piHiPri(pri)
+    
+    HiPi::Wiring::delay(howLong)
+    HiPi::Wiring::millis()
+    
+    HiPi::Wiring::gertboardAnalogWrite(chan, value)
+    HiPi::Wiring::gertboardAnalogRead(chan)
+    HiPi::Wiring::gertboardSPISetup()
+    
+    HiPi::Wiring::lcdHome(fd)
+    HiPi::Wiring::lcdClear(fd)
+    HiPi::Wiring::lcdPosition(fd, x, y)
+    HiPi::Wiring::lcdPutchar(fd, data)
+    HiPi::Wiring::lcdPuts(fd, putstring)
+    HiPi::Wiring::lcdInit (rows, cols, bits, rs, strb, d0, d1, d2, d3, d4, d5, d6, d7)
+    
+    HiPi::Wiring::setupNesJoystick (dPin, cPin, lPin)
+    HiPi::Wiring::readNesJoystick (joystick)
+        
+    HiPi::Wiring::softPwmCreate(pin, value, range)
+    HiPi::Wiring::softPwmWrite(pin, value)
+    
+    HiPi::Wiring::softServoWrite(pin, value)
+    HiPi::Wiring::softServoSetup(p0, p1, p2, p3, p4, p5, p6, p7)
+    
+    HiPi::Wiring::softToneCreate(pin)
+    HiPi::Wiring::softToneWrite(pin, frewq)
+ 
+    HiPi::Wiring::wiringPiI2CRead(fd)
+    HiPi::Wiring::wiringPiI2CReadReg8(fd, reg)
+    HiPi::Wiring::wiringPiI2CReadReg16(fd, reg)
+    HiPi::Wiring::wiringPiI2CWrite(fd, data)
+    HiPi::Wiring::wiringPiI2CWriteReg8(fd, reg, data)
+
+    HiPi::Wiring::wiringPiI2CWriteReg16(fd, reg, data)
+    HiPi::Wiring::wiringPiI2CSetup(devId)
+ 
+    HiPi::Wiring::wiringPiSPIGetFd(channel)
+    HiPi::Wiring::wiringPiSPIDataRW(channel, data, len)
+
+    HiPi::Wiring::wiringPiSPISetup(channel, speed)
+ 
+    HiPi::Wiring::serialOpen(device, baud)
+    HiPi::Wiring::serialClose(fd)
+    HiPi::Wiring::serialFlush(fd)
+    HiPi::Wiring::serialPutchar(fd, c)
+    HiPi::Wiring::serialPuts(fd, s)
+    HiPi::Wiring::serialDataAvail(fd)
+    HiPi::Wiring::serialGetchar(fd)
+    
+    HiPi::Wiring::shiftIn(dPin, cPin, order)
+    HiPi::Wiring::shiftOut(dPin, cPin, order, val)
+</pre>
+<h2>WiringPi Methods not wrapped</h2>
+<pre>
+  wiringPiISR(int pin, int mode, void (*function)(void))
+  piThreadCreate (void *(*fn)(void *))
+</pre>
+<p>The wiringPi library offers the above functions to C programmers for the automatic creation of threads when polling for interrupts. In Perl it would be better to implement your own interrupt handling using a combination of 'select', IO::Poll and the Perl threads module if desired. In many application designs 'select' or IO::Poll may be all that you need</P>
+<pre>
+  serialPrintf(int fd, char *message, ...)
+  lcdPrintf(int fd, char *message, ...)
+</pre>
+ <p>The *Printf functions are not implemented.  Use sprintf to format strings in Perl before passing to the appropriate wiringPi function. </p>
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_gpio.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_gpio_bcm2835.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="wiringpipatch.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

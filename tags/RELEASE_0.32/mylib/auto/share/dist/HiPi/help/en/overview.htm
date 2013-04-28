@@ -1,0 +1,65 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Overview</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+
+<A HREF="contents.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="installation.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Overview</H2><p>The HiPi modules for Perl provide examples of Perl usage with the GPIO and peripherals of the Raspberry Pi.</p>
+<p>The motivation for creation and maintenance of the modules is simply to enjoy messing around with the Raspberry Pi and share the results. I'm particularly interested in doing this in Perl simply because I can</p>
+<p>Like many others, using the Raspberry Pi is my first adventure in direct hardware access so expect that the HiPi modules API will change a lot over time as I learn better ways of accomplishing the tasks I set myself.</p>
+<h2>Disclaimer</h2>
+<p>I'm new to hardware access code so I may distribute code or instructions that fry your Pi. If it burns, I'm sorry. It wasn't on purpose.</p>
+<p>Use of the modules and this documentation is entirely at your own risk. I make no claims regarding the efficacy of any of the code or the accuracy of any of the documentation. I accept no liability whatsover in respect of your usage of the code or documentation.</p>
+<p>The HiPi modules are written for the system Perl on recent offical Rasbian Wheezy releases. In particular, the pre-compiled GUI libraries are built for the arm-linux-gnueabihf architecture. That is the <I>hard float</I> build of Raspbian.
+<p>I have chosen to use a help / document creator that lacks a spell checker - so I am reliant on the old ways. I apologise in advance if mis-spelling distresses you.</p>
+<h2>Included Libraries</h2>
+<p>The distribution includes some third party C libraries used to access the Raspberry Pi GIPO.</p>
+<h4>bcm2835</h4>
+<p>The bcm2835 library from Mike McCauley is included and wrapped in the module <A HREF="mod_gpio_bcm2835.htm">HiPi::BCM2835</A></p>
+<p>See: http://www.airspayce.com/mikem/bcm2835/</p>
+<h4>WiringPi</h4>
+<p>The wiringPi library from Gordon Henderson is included and wrapped in the module <A HREF="mod_gpio_wiring.htm">HiPi::Wiring</A></p>
+<p>See: https://projects.drogon.net/raspberry-pi/wiringpi/</p></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+
+<A HREF="contents.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="installation.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

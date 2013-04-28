@@ -1,0 +1,328 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Interface::MPL3115A2</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_serlcd.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Interface::MPL3115A2</H2><p>This module provides an interface to the popular Freescale MPL3115A2 pressure and temperature sensor.</p>
+<p>It uses <A HREF="mod_gpio_bcm2835_i2c.htm">HiPi::BCM2835::I2C</A> as a backend</p>
+<p>HiPi::BCM2835::I2C supports the read method employing repeated starts that MPL31152 requires.</p>
+<p>Currently only one shot methods and some utilities are wrapped. It is recommeded that you implement your own module inheriting from HiPi::Interface::MPL3115A2 to suit your own requirement.</p>
+<h2>Exported Constants</h2>
+<pre>    use HiPi::Interface::MPL3115A2 qw( :all );
+    
+    <I>register addresses</I>
+
+	MPL_REG_STATUS 
+        MPL_REG_OUT_P_MSB  
+        MPL_REG_OUT_P_CSB 
+        MPL_REG_OUT_P_LSB 
+        MPL_REG_OUT_T_MSB 
+        MPL_REG_OUT_T_LSB 
+        MPL_REG_DR_STATUS  
+        MPL_REG_OUT_P_DELTA_MSB 
+        MPL_REG_OUT_P_DELTA_CSB 
+        MPL_REG_OUT_P_DELTA_LSB 
+        MPL_REG_OUT_T_DELTA_MSB 
+        MPL_REG_OUT_T_DELTA_LSB 
+        MPL_REG_WHO_AM_I        
+        MPL_REG_F_STATUS             
+        MPL_REG_F_DATA               
+        MPL_REG_F_SETUP              
+        MPL_REG_TIME_DLY             
+        MPL_REG_SYSMOD               
+        MPL_REG_INT_SOURCE           
+        MPL_REG_PT_DATA_CFG          
+        MPL_REG_BAR_IN_MSB           
+        MPL_REG_MAR_IN_LSB           
+        MPL_REG_P_TGT_MSB            
+        MPL_REG_P_TGT_LSB            
+        MPL_REG_T_TGT                
+        MPL_REG_P_WND_MSB            
+        MPL_REG_P_WND_LSB            
+        MPL_REG_T_WND                
+        MPL_REG_P_MIN_MSB            
+        MPL_REG_P_MIN_CSB            
+        MPL_REG_P_MIN_LSB            
+        MPL_REG_T_MIN_MSB            
+        MPL_REG_T_MIN_LSB            
+        MPL_REG_P_MAX_MSB            
+        MPL_REG_P_MAX_CSB            
+        MPL_REG_P_MAX_LSB            
+        MPL_REG_T_MAX_MSB            
+        MPL_REG_T_MAX_LSB            
+        MPL_REG_CTRL_REG1            
+        MPL_REG_CTRL_REG2            
+        MPL_REG_CTRL_REG3            
+        MPL_REG_CTRL_REG4            
+        MPL_REG_CTRL_REG5            
+        MPL_REG_OFF_P                
+        MPL_REG_OFF_T                
+        MPL_REG_OFF_H                
+        
+    <I>bitmasks for CTRL_REG1</I>
+
+        MPL_CTRL_REG1_SBYB           
+        MPL_CTRL_REG1_OST            
+        MPL_CTRL_REG1_RST            
+        MPL_CTRL_REG1_OS0            
+        MPL_CTRL_REG1_OS1            
+        MPL_CTRL_REG1_OS2            
+        MPL_CTRL_REG1_RAW            
+        MPL_CTRL_REG1_ALT            
+        
+        MPL_CTRL_REG1_MASK           
+
+    <I>bitmasks for CTRL_REG2</I>
+   
+        MPL_CTRL_REG2_ST0            
+        MPL_CTRL_REG2_ST1            
+        MPL_CTRL_REG2_ST2            
+        MPL_CTRL_REG2_ST3            
+        MPL_CTRL_REG2_ALARM_SEL      
+        MPL_CTRL_REG2_LOAD_OUTPUT    
+        
+        MPL_CTRL_REG2_MASK           
+
+    <I>bitmasks for CTRL_REG3</I>
+        
+        MPL_CTRL_REG3_PP_0D2         
+        MPL_CTRL_REG3_IPOL2          
+        MPL_CTRL_REG3_PP_OD1         
+        MPL_CTRL_REG3_IPOL1          
+      
+        MPL_CTRL_REG3_MASK           
+
+    <I>bitmasks for CTRL_REG4</I>
+        
+        MPL_CTRL_REG4_INT_EN_DRDY    
+        MPL_CTRL_REG4_INT_EN_FIFO    
+        MPL_CTRL_REG4_INT_EN_PW      
+        MPL_CTRL_REG4_INT_EN_TW      
+        MPL_CTRL_REG4_INT_EN_PTH     
+        MPL_CTRL_REG4_INT_EN_TTH     
+        MPL_CTRL_REG4_INT_EN_PCHG    
+        MPL_CTRL_REG4_INT_EN_TCHG    
+        
+        MPL_CTRL_REG4_MASK           
+        
+    <I>bitmasks for all interrupt registers</I>
+
+        MPL_INTREGS_DRDY   
+        MPL_INTREGS_FIFO   
+        MPL_INTREGS_PW     
+        MPL_INTREGS_TW     
+        MPL_INTREGS_PTH    
+        MPL_INTREGS_TTH    
+        MPL_INTREGS_PCHG   
+        MPL_INTREGS_TCHG   
+        
+        MPL_INTREGS_MASK           
+
+    <I>bitmasks for DR_STATUS</I>
+        
+        MPL_DR_STATUS_PTOW           
+        MPL_DR_STATUS_POW            
+        MPL_DR_STATUS_TOW            
+        MPL_DR_STATUS_PTDR           
+        MPL_DR_STATUS_PDR            
+        MPL_DR_STATUS_TDR            
+        
+        MPL_DR_STATUS_MASK       
+    
+    <I>bitmasks for F_STATUS</I>     
+   
+        MPL_F_STATUS_F_OVF           
+        MPL_F_STATUS_F_WMRK_FLAG     
+        MPL_F_STATUS_F_CNT5          
+        MPL_F_STATUS_F_CNT4          
+        MPL_F_STATUS_F_CNT3          
+        MPL_F_STATUS_F_CNT2          
+        MPL_F_STATUS_F_CNT1          
+        MPL_F_STATUS_F_CNT0          
+        
+        MPL_F_STATUS_MASK            
+
+    <I>bitmasks for data configuration</I>
+        
+        MPL_PT_DATA_CFG_DREM         
+        MPL_PT_DATA_CFG_PDEFE        
+        MPL_PT_DATA_CFG_TDEFE        
+        
+        MPL_PT_DATA_CFG_MASK
+
+    <I>data mode flags</I>
+
+        MPL_FUNC_ALTITUDE
+        MPL_FUNC_PRESSURE
+
+    <I>fixed device id 196</I>
+
+        MPL3115A2_ID
+
+    <I>oversample rate flags</I>
+        
+        MPL_OVERSAMPLE_1 
+        MPL_OVERSAMPLE_2
+        MPL_OVERSAMPLE_4 
+        MPL_OVERSAMPLE_8 
+        MPL_OVERSAMPLE_16 
+        MPL_OVERSAMPLE_32
+        MPL_OVERSAMPLE_64 
+        MPL_OVERSAMPLE_128
+        
+        MPL_OVERSAMPLE_MASK
+</pre>
+<h2>Object Constructor and Methods</h2>
+<h5>my $sen = HiPi::Interface::MPL3115A2->new( %params );</h5>
+<pre>    Returns a new instance of the HiPi::Interface::MPL3115A2 class.
+
+    Optional key => values pairs in %params and their defaults
+
+    address     => 0x60,
+    peripheral  => ( RPi board rev == 1 ) ? BB_I2C_PERI_0 : BB_I2C_PERI_0,
+   
+    you can import the peripheral constants into your code using
+
+    use HiPi::BCM2835::I2C qw( :i2c );</pre>
+
+<h5>my $dev = $sen->device();</h5>
+<pre>    Allows you to access the underlying HiPi::BCM2835::I2C instance
+    directly rather than through the wrapped methods in this module.
+
+    For example, to put the device in 'raw' mode:
+
+    my ($reg) = $sen->device->i2c_read_register_rs(MPL_REG_CTRL_REG1, 1);
+    $sen->device->i2c_write(MPL_REG_CTRL_REG1, $reg | MPL_CTRL_REG1_RAW);
+
+    To ensure the device is not in 'raw' mode:
+ 
+    my ($reg) = $sen->device->i2c_read_register_rs(MPL_REG_CTRL_REG1, 1);
+    my $newmask = $reg &~MPL_REG_CTRL_REG1;
+    $sen->device->i2c_write(MPL_REG_CTRL_REG1, $newmask);</pre>
+<h5>my $active = $sen->sysmod();</h5><pre>    Returns false in standy mode, true in active mode.</pre>
+<h5>my $id = $sen->who_am_i();</h5><pre>    Returns standard id MPL3115A2_ID.
+    Often used as a method of confirming correct communication.</pre>
+<h5>my $active = $sen->active([$set]);</h5>
+<pre>    Returns the current active mode. ( 1 == device in active
+    mode, 0 == device in standby mode.)
+    If the optional $set parameter is passed will set active mode on / off 
+    according to the value of $set ( 1 / 0 )</pre>
+<h5>my $mode = $sen->mode([$newmode]);</h5>
+<pre>    Returns the current measuring function as one of the exportable constants:
+
+        MPL_FUNC_ALTITUDE
+        MPL_FUNC_PRESSURE
+
+    If the optional $newmode parameter is passed as either MPL_FUNC_ALTITUDE or
+    MPL_FUNC_PRESSURE, command will set the current measuring mode to that value.</pre>
+<h5>my $oversample = $sen->oversample([$newoversample]);</h5>
+<pre>    Allows setting and retrieving over sampling rate as one of the constants:
+
+        MPL_OVERSAMPLE_1 
+        MPL_OVERSAMPLE_2
+        MPL_OVERSAMPLE_4 
+        MPL_OVERSAMPLE_8 
+        MPL_OVERSAMPLE_16 
+        MPL_OVERSAMPLE_32
+        MPL_OVERSAMPLE_64 
+        MPL_OVERSAMPLE_128</pre>
+<h5>my $delay = $sen->delay_from_oversample($oversample);</h5>
+<pre>    Gets the recommended delay in milliseconds to wait before attempting to retrieve
+    data after a one-shot wake up. The method is used internally by the os_xxxxx
+    methods.....
+
+    my ( $curreg ) = $self->device->i2c_read_register_rs(MPL_REG_CTRL_REG1, 1);
+
+    my $oversample  = ( $curreg & MPL_OVERSAMPLE_MASK );
+    my $delayms = $self->delay_from_oversample($oversample);
+
+    $self->device->i2c_write(MPL_REG_CTRL_REG1, $curreg | MPL_CTRL_REG1_OST );
+
+    $self->device->delay($delayms);
+
+    my( $pmsb, $pcsb, $plsb, $tmsb, $tlsb)
+                  = $self->device->i2c_read_register_rs(MPL_REG_OUT_P_MSB, 5);</pre>
+
+<h5>$sen->reboot();</h5>
+<pre>    Sets the soft reset flag on the MPL3115A2. After this call, the device will
+    be reset to startup defaults.</pre>
+<h5>my ( $alt, $pre, $tmp ) = $sen->os_all_data();</h5><pre>    One shot method returning an array containing converted values
+    for altitude, pressure and temperature.</pre>
+<h5>my ( $altpre, $tmp ) = $sen->os_both_data($function);</h5><pre>    $function is one of MPL_FUNC_PRESSURE or MPL_FUNC_ALTITUDE
+    One shot method returning an array containing 2 converted values
+    for altitude or pressure as chosen by $function, and temperature.</pre>
+<h5>my ( $altpre, $tmp ) = $sen->os_any_data();</h5>
+<pre>    One shot method returning an array containing 2 converted values
+    for either altitude or pressure, whichever is the current data mode, and 
+    temperature. Unlike os_all_data, os_pressure and os_altitude, this method never
+    pushes the device into standby mode.</pre>
+<h5>my $altitude = $sen->os_altitude();</h5><pre>    One shot method returning altitude value.
+    If the current mode is not altitude, the device will be put into standby mode 
+    and switched to altitide operation.</pre>
+<h5>my $pressure = $sen->os_pressure();</h5><pre>    One shot method returning pressure value.
+    If the current mode is not pressure, the device will be put into standby mode 
+    and switched to pressure operation.</pre></pre>
+<h5>my $temperature = $sen->os_temperature();</h5><pre>    One shot method returning temperature value.</pre>
+<h5>my $pressure = $sen->unpack_pressure($msb, $csb, $lsb);</h5><pre>    Takes the values returned from a call such as :
+    $sen->device->i2c_read_register_rs(MPL_REG_OUT_P_MSB, 3)
+    and converts them to a pressure value in pascals.</pre>
+<h5>my ($msb, $csb, $lsb) = $sen->pack_pressure($pressure);</h5><pre>    Takes a pressure in pascals and converts it to three bytes
+    suitable for passing to offset configuration registers.</pre>
+
+<h5>my $altitude = $sen->unpack_altitude($msb, $csb, $lsb);</h5><pre>    Takes the values returned from a call such as :
+    $sen->device->i2c_read_register_rs(MPL_REG_OUT_P_MSB, 3)
+    and converts them to an altitude value in meters.</pre>
+<h5>my ($msb, $csb, $lsb) = $sen->pack_altitude($altitude);</h5><pre>    Takes an altitude in meters and converts it to three bytes
+    suitable for passing to offset configuration registers.</pre>
+<h5>my $temperature = $sen->unpack_temperature($msb, $lsb);</h5><pre>    Takes the values returned from a call such as :
+    $sen->device->i2c_read_register_rs(MPL_REG_OUT_T_MSB, 2)
+    and converts them to a temperature value.</pre>
+<h5>my ($msb, $lsb) = $sen->pack_temperature($temperature);</h5><pre>    Takes a temperature and converts it to two bytes
+    suitable for passing to offset configuration registers.</pre>  
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_serlcd.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

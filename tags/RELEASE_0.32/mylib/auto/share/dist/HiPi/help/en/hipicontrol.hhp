@@ -1,0 +1,87 @@
+[OPTIONS]
+Compatibility=1.1
+Full-text search=Yes
+Contents file=hipicontrol.hhc
+Compiled file=hipicontrol.chm
+Default Window=Help
+Default topic=contents.htm
+Charset=utf-8
+Index file=hipicontrol.hhk
+Title=HiPi Modules
+
+[WINDOWS]
+Help=,"hipicontrol.hhc","hipicontrol.hhk","contents.htm",,,,,,0x2420,,0x380e,,,,,0,,,
+
+[FILES]
+contents.htm
+overview.htm
+installation.htm
+release_notes.htm
+license.htm
+control-app.htm
+control_app_info.htm
+control_app_gpio_1.htm
+control_app_gpio_5.htm
+control_app_gpio_device.htm
+control_app_i2cdev.htm
+control_app_spi.htm
+control_app_w1dev.htm
+command_line_utils.htm
+command_line_utils_i2c.htm
+command_line_utils_pud.htm
+mod_gpio.htm
+mod_gpio_bcm2835.htm
+mod_gpio_wiring.htm
+wiringpipatch.htm
+mod_gpio_bcm2835_i2c.htm
+pin_modules.htm
+pin_modules_base.htm
+pin_modules_gpio.htm
+pin_modules_bcm2835.htm
+pin_modules_wiring.htm
+interrupt.htm
+interrupt_overview.htm
+interrupt_hipi_interrupt.htm
+interrupt_hipi_interrupt_handler.htm
+interrupt_hipi_interrupt_message.htm
+interrupt_example_derived.htm
+interrupt_example_callback.htm
+interrupt_example_mixed.htm
+mod_device.htm
+mod_device_gpio.htm
+mod_device_i2c.htm
+mod_device_spi.htm
+mod_device_onewire.htm
+mod_device_serialport.htm
+mod_interface.htm
+mod_interface_ds18x20.htm
+mod_interface_hd44780.htm
+mod_interface_htadci2c.htm
+mod_interface_htbackpackv2.htm
+mod_interface_mcp3004.htm
+mod_interface_mcp3008.htm
+mod_interface_mcp23017.htm
+mod_interface_mcp49xx.htm
+mod_interface_serlcd.htm
+mod_interface_mpl3115a2.htm
+mod_util.htm
+mod_util_raspberrypi.htm
+mod_util_constant.htm
+mod_util_lang.htm
+mod_util_utils.htm
+mod_util_class.htm
+topic.htm
+topic_gpiopins.htm
+topic_gpiopins_rev1.htm
+topic_spidev.htm
+topic_i2cdev.htm
+topic_w1dev.htm
+topic_gpiodev.htm
+topic_load_drivers_startup.htm
+topic_i2cbus_2.htm
+
+[ALIAS]
+#include "hipicontrol_alias.h"
+
+[MAP]
+#include "hipicontrol_ids.h"

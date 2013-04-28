@@ -1,0 +1,83 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>I2C Device Driver</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_spidev.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_w1dev.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>I2C Device Driver</H2><p>The I2C kernel device drivers provide access to the BCM2835 I2C interface.<p>
+<p>In common with many other device drivers it makes 'files' available in the /dev/ folder of your system that you can write to and read from using <B>ioctl</B> commands.</p>
+<p>The module <A HREF="mod_device_i2c.htm">HiPi::Device::I2C</A> supports communication with i2c devices using the kernel device driver.</p> 
+<p>Note that you may also communicate with i2c devices using the userspace bcm2835 library wrapped in <A HREF="mod_gpio_bcm2835_i2c.htm">HiPi::BCM2835::I2C</A>
+<p>You can have the device drivers loaded at system startup as described in the <A HREF="">Loading Device Drivers Topic.</A></p>
+<p>You can also load the device drivers dynamically with:</p>
+<pre>
+modprobe i2c_bcm2708
+modprobe i2c_dev
+</pre>
+<p>The advantage of loading at startup is that the I2C device driver is configured to allow none root users to access the device files. These configuration settings also apply when using modprobe but your process would need root permissions to run modprobe.</p>
+<h3>Allowing None Root Device Permissions</h3>
+<p>In recent versions of Raspbian Wheezy the I2C device driver creates device files where the group is '<B>i2c</B>' and this group has read write permissions. You can manage who has access to the i2c devices by adding and removing users to and from the i2c group.</p>
+<p>The Raspberry Pi GPIO provides access to either 1 or 2 I2C devices depending on your board revision. Recent boards provide access to 2 peripherals using the device files:</p>
+<pre>
+/dev/i2c-0
+/dev/i2c-1
+</pre>
+<p>/dev/i2c-1 is the default device available on the GPIO PAD1 pins. A pair of GPIO PAD5 pins can be configured to provide access to /dev/i2c-0.</p>
+<p>On earlier revision 1 boards /dev/i2c-0 is the default device available on the GPIO PAD1 pins.</p>
+<p>The <A HREF="control_app_i2c.htm">HiPi Control GUI application</A>Will allow you to manage the i2c group and device driver options.</p>
+<h3>Setting Driver Options</h3>
+<p>The I2C driver accepts an option - baudrate - which defines the default communication speed for the i2c bus. The default setting is 100000. I have found that several devices do not work at this speed. This is because they employ a method called <I>clock stretching</I> that is not supported on current Raspberry Pi hardware or software. This issue can be overcome by making the speed of the bus slower. I have found that a baudrate of 32000 allows the problem devices I have come across to work.</p>
+<p>To change the baudrate you could specify it as an option to modprobe:</p>
+<pre>
+modprobe i2c_bcm2708 baudrate=32000
+</pre>
+<p>To apply a setting as a default to be used every time the spidev driver is loaded we need to create a file in  /etc/modprobe.d/ that contains the line:</p>
+<pre>
+options i2c_bcm2708 baudrate=32000
+</pre>
+<p>The <A HREF="control_app_i2c.htm">HiPi Control GUI application</A> will set or remove this option setting for you and allow you to manage the i2c group.</p></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_spidev.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_w1dev.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

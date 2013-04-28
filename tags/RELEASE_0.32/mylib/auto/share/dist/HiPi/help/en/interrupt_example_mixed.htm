@@ -1,0 +1,165 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Mixed Handlers Example</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="interrupt.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="interrupt_example_callback.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_device.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Mixed Handlers Example</H2>
+<pre><font color="#404040"><i>#!/usr/bin/perl</i></font>
+
+<font color="#009A00"><i># If using interupts the HiPi::Interrupt module should be used
+# before anything else in your script. This is because the
+# module loads threads to handle interrupts for pins managed
+# by HiPi::Device::GPIO, HiPi::BCM2835 and HiPi::Wiring.
+# Loading first reduces your memory footprint and avoids issues
+# with modules you may use that are not thread safe.</i></font>
+
+use HiPi::Interrupt;
+
+<font color="#009A00"><i># To demonstrate use with HiPi::BCM2835 access
+# to pins we must run the script using 'sudo'.
+# If we only used HiPi::Device::GPIO pins then
+# sudo usage is not necessary provided the user
+# running the process is a member of the gpio
+# group.</i></font>
+
+use HiPi::BCM2835;
+
+<font color="#009A00"><i># Some basic modules loaded</i></font>
+
+use 5.14.0;
+use strict;
+use warnings;
+use HiPi::Device::GPIO;
+use HiPi::Constant qw( :raspberry );
+
+<font color="#009A00"><i># instead of deriving a class we use HiPi::Interrupt::Handler 
+# directly and register callbacks for one or more of: 
+#
+#     start, add, remove, interrupt,
+#     error, continue, stop</i></font>
+
+use HiPi::Interrupt::Handler;
+
+my $handler = HiPi::Interrupt::Handler->new;
+
+<font color="#009A00"><i># register a callback for interrupts</i></font>
+
+$handler->register_callback('interrupt', sub {
+    my ($self, $msg ) = @_;
+    say'--------------------------------';
+    my $output =  ( $msg->error ) ? 'ERROR MESSAGE' : uc($msg->action) . ' HANDLED';
+    say $output;
+    say qq(  action    : ) . $msg->action;
+    say qq(  pinid     : ) . $msg->pinid;
+    say qq(  error     : ) . $msg->error;
+    say qq(  value     : ) . $msg->value;
+    say qq(  timestamp : ) . $msg->timestamp;
+    say qq(  msgtext   : ) . $msg->msgtext;
+    say qq(  pinclass  : ) . $msg->pinclass;
+    say'--------------------------------';
+  });
+
+<font color="#009A00"><i># register a callback for start</i></font>
+
+$handler->register_callback('start', sub {
+    my ($self) = @_;
+    say 'INTERRUPT HANDLING STARTED';
+  });
+
+<font color="#009A00"><i># register a callback for stop</i></font>
+
+$handler->register_callback('stop', sub {
+    my ($self) = @_;
+    say 'INTERRUPT HANDLING STOPPED';
+  });
+
+
+
+<font color="#009A00"><i># Create the pin monitoring</i></font>
+
+{  
+    <font color="#009A00"><i># setup a pin as input with a pull up
+    # resistor and falling edge interrupt
+    # using HiPi::Device::GPIO</i></font>
+    
+    my $dev = HiPi::Device::GPIO->new;
+    my $pin1 = $dev->export_pin( RPI_PAD1_PIN_13 );
+
+    $pin1->mode(RPI_PINMODE_INPT);
+    $pin1->set_pud(RPI_PUD_OFF);
+    $pin1->set_pud(RPI_PUD_UP);
+    $pin1->interrupt( RPI_INT_FALL );
+
+    <font color="#009A00"><i># setup a pin as input with a pull down
+    # resistor and rising edge interrupt
+    # using HiPi::BCM2835 ( requires running
+    # using sudo for /dev/mem access  so
+    # by default this example uses gpio
+    # device driver)</font>
+    
+    my $bcm  = HiPi::BCM2835->new;
+    my $pin2 = $bcm->get_pin( RPI_PAD1_PIN_11 );
+    
+    $pin2->mode(RPI_PINMODE_INPT);
+    $pin2->set_pud(RPI_PUD_OFF);
+    $pin2->set_pud(RPI_PUD_DOWN);
+    $pin2->interrupt( RPI_INT_RISE );
+
+    <font color="#009A00"><i># add pins demonstrating using the alternate
+    # method specifying a pin number and class</i></font>
+
+    $handler->add_pin( RPI_PAD1_PIN_13, 'gpio' );
+    $handler->add_pin( RPI_PAD1_PIN_11, 'bcmd' );
+}
+
+<font color="#009A00"><i># run the application loop</i></font>
+$handler->poll();
+
+1;
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="interrupt.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="interrupt_example_callback.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_device.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

@@ -1,0 +1,90 @@
+#!/usr/bin/perl
+
+#########################################################################################
+# Description:  Upgrade HiPi Modules
+# Created       Mon Mar 11 20:27:35 2013
+# svn id        $Id:$
+# Copyright:    Copyright (c) 2013 Mark Dootson
+# Licence:      This work is free software; you can redistribute it and/or modify it 
+#               under the terms of the GNU General Public License as published by the 
+#               Free Software Foundation; either version 3 of the License, or any later 
+#               version.
+#########################################################################################
+
+use strict;
+use warnings;
+use LWP::Simple qw( :DEFAULT $ua );
+use UNIVERSAL::require;
+
+our $VERSION ='0.33';
+
+our $rooturl = 'http://raspberrypi.znix.com/hipifiles';
+our $tmproot   = '/var/tmp/_hipiupgrade';
+
+sub upgrade {
+    my $latest = get_latest_version();
+    my $installed = get_installed_version();
+
+    if( $latest > $installed ) {
+        plog(qq(Installing latest version $latest of HiPi Perl Modules));
+        do_install();
+    } else {
+        plog(qq(Latest version of HiPi Perl Modules is already installed));
+    }
+    exitclean();
+}
+
+sub get_latest_version {
+    my $content;
+    {
+        my $url = qq($rooturl/latest.txt);
+        $ua->env_proxy;
+        $ua->timeout(10);    
+        $content = get($url);
+    }
+    if(!defined($content) ) {
+        exitclean('The HiPi web site is unavailable or could not be reached.');
+    }
+    chomp($content);
+    return $content;
+}
+
+sub get_installed_version {
+    my $class = 'HiPi';
+    if( $class->require ) {
+        return $HiPi::VERSION;
+    } else {
+        return 0;
+    }
+}
+
+sub plog { print $_[0] . qq(\n); }
+
+sub do_install {
+    qx(rm -rf $tmproot) if -e $tmproot;
+    mkdir($tmproot, 0777) or exitclean('could not create temporary install directory');
+    chdir($tmproot) or exitclean('could not enter temporary install directory');
+    my $sourcefile = qq($rooturl/hipi-install);
+    system(qq(wget $rooturl/hipi-install)) and exitclean('Failed to download install script');
+    
+    # As this is an upgrade, don't upgrade Wx if it is not already installed
+    my $class = 'Wx::Mini';
+    if( $class->require ) {
+        system(qq($^X hipi-install));
+    } else {
+        system(qq($^X hipi-install --hipi-wx=0));
+    }
+}
+
+sub exitclean {
+    my( $die ) = @_;
+    qx(rm -rf $tmproot) if -e $tmproot;
+    if(defined($die)) {
+        die $die;
+    }
+    exit(0);
+}
+
+upgrade();
+
+1;

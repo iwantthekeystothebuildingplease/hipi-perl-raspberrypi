@@ -1,0 +1,350 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Device::I2C</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_device.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_device_gpio.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_device_spi.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Device::I2C</H2><p>The HiPi::Device::I2C module provides access to the kernel driver for the I2C bus.</p>
+<p>See : <A HREF="topic_i2cdev.htm">I2C Device Driver</A></p>
+<p>The settings for the I2C device can be controlled in the <A HREF="control_app_i2cdev.htm">HiPi Control GUI</A>. This includes the baudrate or transfer rate used on the I2C bus.</p>
+<p>On Model B Revision 2 and Model A boards, you may use a second I2C bus by attaching a connector to the P5 Pad on the Raspberry Pi. See: <A HREF="topic_i2cbus_2.htm">Second I2C Bus</A>.</p>
+<p>This module implements both I2C and SMBus protocol calls. The SMBus protocol appears to be the most widely supported on the i2c bus. It is likely that your i2c devices support it.</p>
+<p>The following interface modules use HiPi::Device::I2C as a backend and may contain code that helps with your own usage.</p>
+<p><A HREF="mod_interface_htadci2c.htm">HiPi::Interface::HTADCI2C</A><br />
+<A HREF="mod_interface_mcp23017.htm">HiPi::Interface::MCP23017</A><br />
+<A HREF="mod_interface_htbackpackv2.htm">HiPi::Interface::HTBackpackV2</A> <I>( as an optional backend )</I><br />
+</p>
+<p>You can also access your i2c peripherals through the BCM SOC directly. See: <A HREF="mod_gpio_bcm2835_i2c.htm">HiPi::BCM2835::I2C</A></p>
+<h2>Class Methods</h2>
+<h5>HiPi::Device::I2C->load_modules( $forceunload );</h5>
+<pre>    Loads the kernel device driver modules for i2c
+    i2c_bcm2708
+    i2c_dev
+
+    When $forceunload is true, unloads the kernel modules
+    first if they are loaded (effectively forces a reload)
+
+    i2c_bcm2708 is loaded with the current baudrate
+
+    Of course, the user the script is running as must have
+    root permissions to load and unload kernel modules.</pre>
+<h5>HiPi::Device::I2C->unload_modules();</h5>
+<pre>    Unloads the kernel device driver modules for i2c
+    i2c_bcm2708
+    i2c_dev
+
+    Of course, the user the script is running as must have
+    root permissions to load and unload kernel modules.</pre>
+<h5>HiPi::Device::I2C->get_baudrate();</h5>
+<pre>    Returns the current baudrate of a loaded i2c_bcm2708
+    module. If the module is not loaded or the process 
+    does not have root permissions, returns the current
+    default module setting for baudrate.</pre>
+<h5>HiPi::Device::I2C->set_baudrate( $baudrate );</h5>
+<pre>    Sets the baudrate of the i2c_bcm2708 module. Must
+    unload and load the kernel module to do this.
+
+    Of course, the user the script is running as must have
+    root permissions to load and unload kernel modules.
+    
+    Common values for baudrate are:
+    
+       3816  - the minimum supported
+     100000  - the i2c standard
+     400000  - fast i2c standard
+    1000000  - seems to be the fastest reliable speed that this
+	       implementation supports. Of course, all the 
+	       devices on your bus must support this too.
+      32000  - the Broadcom I2C peripherals don't support
+	       clock stretching so if you have a device that
+	       employs this, a baudrate of 32000 ( or perhaps
+	       even lower ) will often allow the device to work.</pre>
+<h5>HiPi::Device::I2C->get_device_list();</h5>
+<pre>    Returns an array containing the names of available
+    devices. 
+    Will normally return ('/dev/i2c-1', '/dev/i2c-0')
+</pre>
+<h2>Object Constructor and Methods</h2>
+
+<h5>my $dev = HiPi::Device::I2C->new( address => $devaddress );</h5>
+<pre>    $devaddress    address of the device ( e.g. 0x20 ) on the
+                   default bus. The default bus is determined
+                   according to your Pi board revision.
+                   revision 1 = /dev/i2c-0
+                   revision 2 = /dev/i2c-1
+    
+    returns a new instance of the HiPi::Device::I2C class.
+    
+    You can specify which i2c device to use in the constructor if
+    you wish using the key 'devicename'.
+
+    my $dev = HiPi::Device::I2C->new( 
+        devicename => '/dev/i2c-1',
+        address    => 0x28 
+    );
+    
+    You may also specify which backend calls to use with the generic
+    busmode methods.
+    
+    my $dev = HiPi::Device::I2C->new( 
+        devicename => '/dev/i2c-1',
+        address    => 0x28,
+        busmode    => 'smbus',
+    );
+    
+    or
+
+    my $dev = HiPi::Device::I2C->new( 
+        devicename => '/dev/i2c-1',
+        address    => 0x28,
+        busmode    => 'i2c',
+    );
+
+</pre>
+<h3>Busmode Methods</h3>
+<p>HiPi::Device::I2C provides both i2c and SMBus style methods. So that you can write backend independent code, these methods are wrappers for the i2c or smbus calls, depending on your chosen backend. Note that <A HREF="mod_gpio_bcm2835_i2c.htm">HiPi::BCM2835::I2C</A> also supports these methods so you may write code that works with backends i2c, smbus and bcm2835.</p>
+<h5>$dev->bus_write( @params );</h5>
+<pre>    The module provides the method bus_write as 
+    a generic call to the current backend.
+    
+    @params is a list of bytes to write to the currently
+    addressed device.</pre>
+<h5>$dev->bus_write_error( @params );</h5>
+<pre>    The module provides the method bus_write_error as 
+    a generic call to the current backend.
+    
+    @params is a list of bytes to write to the currently
+    addressed device. 
+
+    The bus_write_error method is error tolerant and is 
+    generally used when an external device has a soft reset 
+    or reboot call that exits the i2c conversation when 'reset' 
+    is set. The standard i2c_write command will return an 
+    error in this case as the slave did not acknowledge the 
+    reset byte.</pre>
+<h5>$dev->bus_read( $cmdval, $numbytes );</h5>
+<pre>    The module provides the method bus_read as 
+    a generic call to the current backend.
+
+    $cmdval is the value ( normally a register address
+    on the slave) that you wish to read from.
+
+    $numbytes is the number of bytes you wish to read.
+
+    Returns an array of bytes $numbytes long.</pre>
+<h5>$dev->bus_read_bits( $cmdval, $numbytes );</h5>
+<pre>    The module provides the method bus_read_bits as 
+    a generic call to the current backend.
+
+    Returns an array of bits 8 * $numbytes long from the
+    register in $cmdval.
+
+    If a single byte is read that has the value 0b01001100
+    then the bits in the array will have the values:
+    
+    $return[7] == 0
+    $return[6] == 1
+    $return[5] == 0
+    $return[4] == 0
+    $return[3] == 1
+    $return[2] == 1
+    $return[1] == 0
+    $return[0] == 0
+
+    Usage:
+    
+    my @bits = $dev->bus_read_bits(0xC1, 1);
+    $bits[3] = 1;
+    dev->bus_write_bits(0xC1, @bits);</pre>
+
+<h5>$dev->bus_write_bits( $cmdval, @bits );</h5>
+<pre>    The module provides the method bus_write_bits as 
+    a generic call to the current backend.
+
+    Writes a number of bytes equal to @bits / 8 to the 
+    register in $cmdval.
+
+    For the array of 8 bits:
+
+    my @bits = ( 1,1,1,0,0,0,0,1 )
+
+    the value 0b10000111 will be written to $cmdval.
+
+    Usage:
+    
+    my @bits = $dev->bus_read_bits(0xC1, 1);
+    $bits[3] = 1;
+    dev->bus_write_bits(0xC1, @bits);</pre>
+<h3>I2C Methods</h3>
+<p>These methods wrap ioctl calls that use the i2c_rdwr_ioctl_data and i2c_msg structs. This allows for multiple write and read operations in the same transaction.</p>
+<h5>$dev->i2c_write( @params );</h5>
+<pre>    @params is a list of bytes to write to the slave device.
+    Normally, the first (and perhaps only) item in the list will 
+    be a register address on the slave.
+    
+    Use of the busmode wrapper methods is recommended.</pre>
+<h5>$dev->i2c_write_error( @params );</h5>
+<pre>    @params is a list of bytes to write to the slave device.
+    Normally, the first (and perhaps only) item in the list will 
+    be a register address on the slave.
+
+    The i2c_write_error method is error tolerant and is generally 
+    used when an external device has a soft reset or reboot call 
+    that exits the i2c conversation when 'reset' is set.
+    The standard i2c_write command will return an error in this case
+    as the slave did not acknowledge the reset byte.</pre>
+<h5>$dev->i2c_read( $numbytes );</h5>
+<pre>    Reads a number of bytes $numbytes read from the current
+    register address in the slave (normally set using a previous
+    write).
+
+    Returns an array of bytes containing $numbytes items.
+    
+    Use of the busmode wrapper methods is recommended.</pre>
+<h5>$dev->i2c_read_register( $register, $numbytes );</h5>
+<pre>    Reads a number of bytes $numbytes read from the register 
+    address in $register.
+
+    Combines the write of the register address with the subsequent
+    read in a single transaction.
+
+    Returns an array of bytes containing $numbytes items.
+    
+    Use of the busmode wrapper methods is recommended.</pre>
+<h3>SMBus Methods</h3>
+<h5>$dev->smbus_write( @params );</h5>
+<pre>    The module provides the method smbus_write as 
+    a generic call to the main smbus methods. I have
+    found it is all I need for all i2c devices
+    tested so far.
+    
+    If @params is a single value, the method calls
+    
+    $dev->smbus_write_byte($params[0]);
+
+    If @params contains two values, the method calls
+    
+    $dev->smbus_write_byte_data( @params );
+
+    With three or more values in @params, the method does
+    
+    my $command = shift @params;
+    $dev->smbus_write_i2c_block_data($command, @bytes );</pre>
+<h5>$dev->smbus_write_error( @params );</h5>
+<pre>    The smbus_write_error method is an error tolerant version of
+    smbus_write. It can be used when an external device has a soft 
+    reset or reboot call that exits the i2c conversation when 'reset' 
+    is set. The standard smbus_write command will return an error in 
+    this case as the slave did not acknowledge the reset byte.</pre>
+<h5>$dev->smbus_read( $cmdval, $numbytes );</h5>
+<pre>    The module provides the method smbus_read as 
+    a generic call to the main smbus methods. I have
+    found it is all I need for all i2c devices
+    tested so far.
+    
+    If $cmdval is not defined, the method returns a
+    scalar value from
+    
+    $dev->smbus_read_byte;
+    
+    If $cmdval is defined but $numbytes is undefined
+    or zero, then the method returns a scalar value
+    from
+    
+    $dev->smbus_read_byte_data( $cmdval );
+
+    If $cmdval is defined and $numbytes is greater
+    than zero then the method returns an array of
+    values from
+
+    $dev->smbus_read_i2c_block_data( $cmdval, $numbytes );</pre>
+<h5>$dev->smbus_write_quick($value);</h5>
+<pre>    writes $value to the device</pre>
+<h5>$dev->smbus_read_byte();</h5>
+<pre>    returns the first byte read from the device</pre>
+<h5>$dev->smbus_write_byte($value);</h5>
+<pre>    writes byte $value to the device</pre>
+<h5>$dev->smbus_read_byte_data( $command );</h5>
+<pre>    returns byte from the device specifying
+    register address in $command;</pre>
+<h5>$dev->smbus_write_byte_data( $command, $value );</h5>
+<pre>    writes byte $value to the register address specified
+    in $command</pre>
+<h5>$dev->smbus_read_word_data($command);</h5>
+<pre>    reads a word beginning at the device register 
+    specified in $command;</pre>
+<h5>$dev->smbus_write_word_data($command, $word);</h5>
+<pre>    writes a word to the device register 
+    specified in $command;</pre>
+<h5>$dev->smbus_read_word_swapped($command);</h5>
+<pre>    reads a word beginning at the device register 
+    specified in $command and swaps the high /low
+    bytes in the return value</pre>
+<h5>$dev->smbus_write_word_swapped($command, $word);</h5>
+<pre>    writes a word to the device register 
+    specified in $command after swapping the
+    high / low bytes in $word</pre>
+<!--<h5>$dev->smbus_process_call($command, $value);</h5>
+    Low level command. See the SMBus documentation -->
+<h5>$dev->smbus_read_block_data( $command );</h5>
+<pre>    Returns an array of values read starting at register
+    specified in $command.
+    In all devices tested so far I have found it necessary
+    to use $dev->smbus_read_i2c_block_data; instead.</pre>
+<h5>$dev->smbus_read_i2c_block_data( $command, $numbytes );</h5>
+<pre>    returns an array of bytes $numbytes in size reading from
+    register specified in $command;</pre>
+<h5>$dev->smbus_write_block_data( $command, $arrayref );</h5>
+<pre>    Writes all the bytes from array reference $arrayref to
+    device specifying the register in $command.
+    In all devices tested so far I have found it necessary
+    to use $dev->smbus_write_i2c_block_data instead.</pre>
+<h5>$dev->smbus_write_i2c_block_data( $command, $arrayref );</h5>
+<pre>    Writes all the bytes from array reference $arrayref to
+    device specifying the register in $command. 
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_device.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_device_gpio.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_device_spi.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>
