@@ -1,0 +1,56 @@
+diff -ruNw srcc/wiringPi/wiringPi/Makefile copy/wiringPi/Makefile
+--- srcc/wiringPi/Makefile	2013-02-23 02:18:48.353400000 +0000
++++ copy/wiringPi/Makefile	2013-02-23 05:16:14.427400000 +0000
+@@ -33,7 +33,7 @@
+ 
+ #DEBUG	= -g -O0
+ DEBUG	= -O2
+-CC	= gcc
++#CC	= gcc
+ INCLUDE	= -I.
+ CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe -fPIC
+ 
+@@ -59,14 +59,14 @@
+ 
+ static:		$(STATIC)
+ 
+-$(STATIC):	$(OBJ)
+-	@echo "[Link (Static)]"
+-	@ar rcs $(STATIC) $(OBJ)
++$(STATIC):	$(OBJ) $(OBJ_I2C)
++	@echo "[Link Static]"
++	@ar rcs $(STATIC) $(OBJ) $(OBJ_I2C)
+ 	@ranlib $(STATIC)
+ #	@size   $(STATIC)
+ 
+ $(DYNAMIC):	$(OBJ)
+-	@echo "[Link (Dynamic)]"
++	@echo "[Link Dynamic]"
+ 	@$(CC) -shared -Wl,-soname,libwiringPi.so.1 -o libwiringPi.so.1.0 -lpthread $(OBJ)
+ 
+ i2c:	$(OBJ) $(OBJ_I2C)
+diff -ruNw wiring/wiringPi/wiringPi/wiringPi.c trunk/wiring/src/wiringPi/wiringPi.c
+--- srcc/wiringPi/wiringPi.c	2013-02-23 02:18:48.390400000 +0000
++++ copy/wiringPi/wiringPi.c	2013-02-23 20:24:16.979400000 +0000
+@@ -1119,7 +1119,7 @@
+ 
+     if (pid == 0)	// Child, exec
+     {
+-      execl ("/usr/local/bin/gpio", "gpio", "edge", pinS, modeS, (char *)NULL) ;
++      execl ("/usr/local/bin/hipi-gpio", "gpio", "edge", pinS, modeS, (char *)NULL) ;
+       return -1 ;	// Failure ...
+     }
+     else		// Parent, wait
+diff -ruNw wiring/wiringPi/wiringPi/wiringPiI2C.c trunk/wiring/src/wiringPi/wiringPiI2C.c
+--- srcc/wiringPi/wiringPiI2C.c	2013-02-23 02:18:48.400400000 +0000
++++ copy/wiringPi/wiringPiI2C.c	2013-02-23 03:56:18.005400000 +0000
+@@ -26,8 +26,8 @@
+ #include <stdlib.h>
+ #include <fcntl.h>
+ #include <sys/ioctl.h>
+-#include <linux/i2c-dev.h>
+ 
++#include "../../../mylib/include/local-i2c-dev.h"
+ #include "wiringPi.h"
+ #include "wiringPiI2C.h"
+ 

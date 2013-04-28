@@ -1,0 +1,66 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Interrupt Handling Overview</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="interrupt.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="interrupt.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="interrupt_hipi_interrupt.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Interrupt Handling Overview</H2><p>The HiPi Perl distribution provides a set of modules that wrap GPIO interrupt handling.</p>
+
+<p>The module <A HREF="interrupt_hipi_interrupt.htm">HiPi::Interrupt</A> loads background threads that monitor or poll for interrupts and notify your main thread</P>
+<p>The module <A HREF="interrupt_hipi_interrupt_handler.htm">HiPi::Interrupt::Handler</A> can be used directly or you can derive your own class from it to handle interrupt notifications in your main thread.<p>
+<p>Basic usage is covered in three examples:</p>
+<dl>
+<p><dd><A HREF="interrupt_example_derived.htm"><b>The Derived Class Example</b></A> shows how to derive your own class to handle interrupt messages.</dd></p>
+<p><dd><A HREF="interrupt_example_callback.htm"><b>The Callback Example</b></A> shows how to use <A HREF="interrupt_hipi_interrupt_handler.htm">HiPi::Interrupt::Handler</A> directly to handle interrupts without deriving your own class.</dd></p>
+<p><dd><A HREF="interrupt_example_mixed.htm"><b>The Mixed Handler Example</b></A> shows how you can handle interrupts for pins accessed though the kernel device driver sysfs filespace using <A HREF="mod_device_gpio.htm">HiPi::Device::GPIO</A> and pins accessed directly via the hardware bcm2835 library using <A HREF="mod_gpio_bcm2835.htm">HiPi::BCM2835</A></dd></p>
+</dl>
+<p>Only pins accessed through the though the kernel device driver sysfs filespace using <A HREF="mod_device_gpio.htm">HiPi::Device::GPIO</A> provide true system interrupt handling. For pins accessed directly on the hardware using <A HREF="mod_gpio_bcm2835.htm">HiPi::BCM2835</A> or<A HREF="mod_gpio_wiring.htm"> HiPi::Wiring</A>, pseudo interrupt handling is provided by polling the pin values for changes. This is necessary because recent Raspbian releases include code in the statically compiled gpio kernel driver that prevents use of the BCM2835 hardware interrupt registers.</p>
+<h2>Limitations</h2>
+<p>You are unlikely to be able to drive any form of protocol that is timing critical or consistently handle state changes of very short duration using these interrupt modules. It is a limitation of user space code on the Linux Operating system and Perl without considering any flaws that may be introduced by this particular implementation.</p>
+<p>However, you should be able to build working applications where timing is not critical and communication is driven using waits of indeterminate length.</p>
+<p>The use of separate threads to handle interrupts and value polling means that issues with catching all events should be minimal. However, your main thread code may fall behind as multiple interrupts are received depending on the efficiency of your main thread code so this should be a consideration in designing your model and application. The only guarantee is that those interrupts or state changes that are caught will be delivered to the main thread code in order for each particular pin.</p> </FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="interrupt.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="interrupt.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="interrupt_hipi_interrupt.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

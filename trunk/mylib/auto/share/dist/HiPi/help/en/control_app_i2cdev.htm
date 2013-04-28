@@ -1,0 +1,71 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>I2C Device</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="control-app.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="control_app_gpio_device.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="control_app_spi.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>I2C Device</H2><p>To run the Hipi Control GUI</p>
+<p><code>gksudo hipi-control-gui</code></p>
+<p>
+<IMG SRC="controli2cdev.png" BORDER="0">
+</p>
+<br />
+<br />
+<p>I2C devices can be accessed using a kernel device driver instead of accessing the appropriate pins directly through /dev/mem. This has the advantage that you can set up the device driver options so that access does not require root permissions.</p>
+<p>This panel allows you to setup and manage the <A HREF="topic_i2cdev.htm">I2C Device Driver</A> settings</p>
+<p>Check or uncheck the I2C Kernel Modules Loaded checkbox to load and unload the kernel drivers. To permanently skip or load the device drivers at system startup see <A HREF="topic_load_drivers_startup.htm">Loading Device Drivers</A>.</p>
+<p>Access to the i2c devices can be granted to members of the group <I><B>i2c</B></I>. The panel provides a simple interface that allows you to toggle this option on and off using the 'Allow Group Access' checkbox and manage membership of the <I>i2c</I> group.</p>
+<p>You can also set the baudrate of the i2c bus which may help overcome problems with the Raspbian kernel driver and i2c devices that use clock stretching</p>
+<p>Changes to the 'Allow Group Access' and 'baudrate' settings will persist across system reboots.</p>
+<p>See Also : </p>
+<pre>
+<A HREF="topic_i2cdev.htm">I2C Device Driver</A>
+
+<A HREF="topic_load_drivers_startup.htm">Loading Device Drivers</A>
+</pre>
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="control-app.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="control_app_gpio_device.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="control_app_spi.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

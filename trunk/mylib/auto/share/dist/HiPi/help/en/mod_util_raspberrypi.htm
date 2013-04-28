@@ -1,0 +1,107 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::RaspberryPi</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_util.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_util.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util_constant.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::RaspberryPi</H2><p>This module provides several useful functions that provide information about your Raspberry Pi</p>
+<br /> 
+<h5>HiPi::RaspberryPi::get_cpuinfo()</h5>
+<pre>    Returns a hash reference containing the
+    key => value pairs extracted from /proc/cpuinfo
+    with an additional key 'GPIO Revision' that
+    contains the value 1 or 2 depending on your
+    board revision number.
+
+    Example Returned Hash Key Value Pairs
+
+    'GPIO Revision'     => '2'
+    'Processor'         => 'ARMv6-compatible processor rev 7 (v6l)'
+    'BogoMIPS'          => '697.95'
+    'Features'          => 'swp half thumb fastmult vfp edsp java tls'
+    'CPU implementer'   => '0x41'
+    'CPU architecture'  => '7'
+    'CPU variant'       => '0x0'
+    'CPU part'          => '0xb76'
+    'CPU revision'      => '7'
+    'Hardware'          => 'BCM2708'
+    'Revision'          => '000f'
+    'Serial'            => '00000000ec4805c2'
+
+    A Model A Raspberry Pi will have 2 for the
+    'GPIO Revision' value.</pre>
+<h5>HiPi::RaspberryPi::get_piboard_info()</h5>
+<pre>    Returns a hash reference containing information about
+    your Raspberry Pi derived from the /proc/cpuinfo
+    Revision value.
+
+    the keys are: model, release, revision, memory, manufacturer
+
+    The release value is 1 or 2 and describes the different 
+    GPIO connections between the two Model B revisions.
+    Model A Raspberries always hav 2 in the revision field.
+
+    Example for a Pi with a Revision '000f'
+    
+    model        => 'Raspberry Pi Model B Revision 2.0'
+    release      => 'Q4 2012'
+    revision     => '2' 
+    memory       => '512' 
+    manufacturer => 'Qisda'</pre>
+<h5>HiPi::RaspberryPi::get_piboard_rev()</h5>
+<pre>    returns 1 or 2 - value from 'GPIO Revision' 
+    member of HiPi::RaspberryPi::get_cpuinfo();</pre>
+<h5>HiPi::RaspberryPi::get_validpins()</h5>
+<pre>    Returns an array of GPIO pin numbers valid
+    for this Raspberry Pi. (valid == connected
+    to the Raspberry Pi GPIO pads.)
+    For example, the first two array members
+    for a Model B Revision 1 board are 0 and 1.
+    The first two array members returned for
+    a Module B Revision 2 or Model A board are 2 and 3
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_util.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_util.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util_constant.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

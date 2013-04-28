@@ -1,0 +1,125 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Interface::HD44780</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_ds18x20.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_interface_htadci2c.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Interface::HD44780</H2><p>HiPi::Interface::HD44780 provides an abstract class that acts as a base for common implementations of LCD interfaces driving LCD devices based on the Hitachi HD44780 controller</p>
+<p>Currently there are two concrete implementations that derive from HiPi::Interface::HD44780</p>
+<p><A HREF="mod_interface_serlcd.htm">HiPi::Interface::SerLCD</A></p>
+<p><A HREF="mod_interface_htbackpackv2.htm">HiPi::Interface::HTBackpackV2</A></p>
+<p>Classes based on HiPi::Interface::HD44780 inherit the following methods:</p>
+<h2>Object Methods</h2>
+<h5>$lcd->enable( $bool );</h5>
+<pre>    Switch the LCD on / off</pre>
+<h5>$lcd->set_cursor_position($column, $row);</h5>
+<pre>    Set the current cursor position. 
+
+    $lcd->set_cursor_position(0, 0) sets the position
+    to the leftmost column of the top row.</pre>
+<h5>$lcd->move_cursor_left();</h5>
+<pre>    Shift the cursor position 1 to the left</pre>
+<h5>$lcd->move_cursor_right();</h5>
+<pre>    Shift the cursor position 1 to the right</pre>
+<h5>$lcd->home();</h5>
+<pre>     Move the cursor to top left
+
+     same as $lcd->set_cursor_position(0, 0)</pre>
+<h5>$lcd->clear();</h5>
+<pre>     Move the cursor to top left and clear all text</pre>
+<h5>$lcd->set_cursor_mode( $mode );</h5>
+<pre>     Set the cursor mode. Valid values for $mode are
+
+         SRX_CURSOR_OFF 
+         SRX_CURSOR_BLINK 
+         SRX_CURSOR_UNDERLINE
+
+     You can import these constants into your namespace with
+
+     use HiPi::Interface::HD44780 qw( :cursor );</pre>
+<h5>$lcd->$backlight( $percent );</h5>
+<pre>    Set the backlight light level. Valid value for $percent 
+    is a number between 0 and 100</pre>
+<h5>$lcd->send_text( $textstring );</h5>
+<pre>    Send $textstring to be 'printed' at the current cursor position.</pre>
+<h5>$lcd->send_command( $command );</h5>
+<pre>    Send a raw HD44780 command. $command can be one of
+
+         HD44780_CLEAR_DISPLAY 
+         HD44780_HOME_UNSHIFT
+         HD44780_CURSOR_MODE_LEFT
+         HD44780_CURSOR_MODE_LEFT_SHIFT
+         HD44780_CURSOR_MODE_RIGHT
+         HD44780_CURSOR_MODE_RIGHT_SHIFT
+         HD44780_DISPLAY_OFF
+         HD44780_DISPLAY_ON
+         HD44780_CURSOR_OFF
+         HD44780_CURSOR_UNDERLINE
+         HD44780_CURSOR_BLINK
+         HD44780_SHIFT_CURSOR_LEFT
+         HD44780_SHIFT_CURSOR_RIGHT
+         HD44780_SHIFT_DISPLAY_LEFT
+         HD44780_SHIFT_DISPLAY_RIGHT
+
+     You can import these constants into your namespace with
+
+     use HiPi::Interface::HD44780 qw( :hd44780 );</pre>
+<h5>$lcd->update_baudrate( $brconstant );</h5>
+<pre>     Update the baudrate to the new value. Only useful
+     for implementations using a serial protocol.
+     Implementations provide their own constants for
+     baudrate. Some implementations may require a hard reset
+     for the device after this method is called</pre>
+<h5>$lcd->update_geometry();</h5>
+<pre>     Update the interface geometry with the 'width' and 'lines'
+     values passed in the $lcd constructor. Some
+     implementations may require a hard reset for
+     the device after this method is called
+</pre>
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_ds18x20.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_interface_htadci2c.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

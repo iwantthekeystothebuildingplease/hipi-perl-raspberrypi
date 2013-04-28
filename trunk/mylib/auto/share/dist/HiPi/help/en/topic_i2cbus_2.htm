@@ -1,0 +1,149 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Second I2C Bus</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_load_drivers_startup.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Second I2C Bus</H2><p>For Raspberry Pi Model B Revision 2 boards and Model A boards a second i2c bus is avaliable.</p>
+<p>This is I2C0 and is setup by default for use with the Raspberry Pi Camera Module. The Camera Module connects to the S5 connector as noted in the bottom right quarter of the following picture:</p>
+<p align="center"><IMG SRC="helpp5.JPG" BORDER="0"> </p>
+<p>Alternatively you can setup the I2C0 bus as a second i2c bus for your own usage. It follows that you can only have one or the other - either you can have the I2C0 bus support the Raspberry Pi Camera module or you can dedicate it for your own use - but not both.</p>
+<p>For alternative use the I2C0 bus is broken out to GPIO pins on the P5 header. This header has no connector attached during manufacture so if you want to use it you must solder a connector yourself. The P5 pad is designed to accept a connector on the reverse side of the Raspberry Pi board. There is not enough room next to the GPIO Pad 1 pins to mount connectors in the standard way. (This is by design).</p>
+<p>You can see from the above picture that I have soldered pins next to the GPIO 1 Pad rather than in the manner the P5 header was designed for, on the reverse of the board. These are usable because I have soldered them at an angle to lean away from the GPIO 1 header. If you do this too, remember that the pins are effectively the 'wrong way around' from left to right (top to bottom in the picture).</p>
+<p>The Pin out diagram for P5 is:</p>
+<p><code>
+<table>
+<tr>
+
+<td><font color="#808000"><b>Wiring</b></font></td>
+<td><font color="#00C000"><b>GPIO</b></font></td>
+<td align="center"><font color="#0000C0"><b>Name</b></font></td>
+<td colspan="2" align="center"><font color="#CC0040"><b>Raspberry Pi</b></font></td>
+<td align="center"><font color="#0000C0"><b>Name</b></font></td>
+<td align="right"><font color="#00C000"><b>GPIO</b></font></td>
+<td align="right"><font color="#808000"><b>Wiring</b></font></td>
+</tr>
+
+<tr>
+<td align="left" >--------</td>
+<td align="left" >------</td>
+<td align="right">----------</td>
+<td align="right">----</td>
+<td align="left" >----</td>
+<td align="left" >----------</td>
+<td align="right">------</td>
+<td align="right">--------</td>
+</tr>
+
+
+<tr>
+<td>-</td>
+<td>-</td>
+<td align="right">5V0</td>
+<td align="right">1</td>
+<td>2</td>
+<td>3V3</td>
+<td align="right">-</td>
+<td align="right">-</td>
+</tr>
+
+<tr>
+<td align="left" >17</td>
+<td align="left" >28</td>
+<td align="right">GPIO_28</td>
+<td align="right">3</td>
+<td align="left" >4</td>
+<td align="left" >GPIO_29</td>
+<td align="right">29</td>
+<td align="right">18</td>
+</tr>
+
+<tr>
+<td align="left" >19</td>
+<td align="left" >30</td>
+<td align="right">GPIO_30</td>
+<td align="right">5</td>
+<td align="left" >6</td>
+<td align="left" >GPIO_31</td>
+<td align="right">31</td>
+<td align="right">20</td>
+</tr>
+
+<tr>
+<td align="left" >-</td>
+<td align="left" >-</td>
+<td align="right">GND</td>
+<td align="right">7</td>
+<td align="left" >8</td>
+<td align="left" >GND</td>
+<td align="right">-</td>
+<td align="right">-</td>
+</tr>
+
+</table>
+</code>
+</p>
+<p>If pins GPIO 28 and GPIO 29 are set to use the ALT0 function then they become I2C0_SDA and I2C0_SCL respectively. Because I have effectively soldered pins for P5 to the 'wrong' side of the board, then to map the above table to the picture of the P5 header you must first rotate the picture 90 degrees clockwise then swap the position of the pins right to left.( that is, Pin 1 5v0 swapped with Pin 2 3v3, Pin 3 GPIO 28 swapped with Pin 4 GPIO 29, and so on )</p>
+<p><IMG SRC="modelap5.JPG" BORDER="0"></p>
+<p>You can set up the second I2C0 bus directly in code with:</p>
+ <pre>use HiPi::BCM2835;
+my $dev = HiPi::BCM2835->new;
+$dev->set_I2C0(1);</pre>
+<p>Similarly you can disable the I2C0 bus and restore its operation on the S5 camera connector with:</p><pre>$dev->set_I2C0(0);</pre>
+<p>If you are running as an unprivileged user you can enable the I2C0 bus using the <A HREF="command_line_utils_i2c.htm">hipi-i2c utility</A>.</p>
+<pre>hipi-i2c e 0 1</pre>
+<p> or to disable</p>
+<pre>hipi-i2c e 0 0</pre>
+<p>This may prove useful if you want to access the I2C0 bus using the standard kernel i2c device drivers. After the kernel module is loaded you can call <code>hipi-i2c e 0 1</code> to make the I2C0 bus available on the P5 header pins.</p>
+<p>Finally, you can also use the <A HREF="control_app_gpio_5.htm">HiPi Control GUI application</A> to enable and disable the I2C0 bus on the P5 header manually.</p>
+
+
+
+
+
+
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_load_drivers_startup.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

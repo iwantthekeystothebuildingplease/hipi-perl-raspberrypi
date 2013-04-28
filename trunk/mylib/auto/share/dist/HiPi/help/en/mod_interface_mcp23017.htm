@@ -1,0 +1,241 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Interface::MCP23017</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_mcp3008.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_interface_mcp49xx.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Interface::MCP23017</H2><p>This module provides an interface to the popular MCP23017 GPIO extender with i2c interface.</p>
+<p>It uses <A HREF="mod_device_i2c.htm">HiPi::Device::I2C</A> as a backend</p>
+
+<h2>Object Constructor and Methods</h2>
+<pre>
+The module exports the following constants using tag mcp23017
+
+    use HiPi::Interface::MCP23017 qw( :mcp23017 );
+    
+    # exports constants
+
+    # for bit positions in the IOCON register byte
+    MCP23017_BANK
+    MCP23017_MIRROR
+    MCP23017_SEQOP
+    MCP23017_DISSLW
+    MCP23017_HAEN
+    MCP23017_ODR
+    MCP23017_INTPOL
+    
+    # for defining pin direction in the IODIRA/IODIRB registers
+    MCP23017_INPUT
+    MCP23017_OUTPUT
+
+    # if you like constants for pin levels
+    MCP23017_HIGH
+    MCP23017_LOW
+ 
+ </pre> 
+<h5>my $ext = HiPi::Interface::MCP23017->new( %params );</h5>
+<pre>    Returns a new instance of the HiPi::Interface::MCP23017 class.
+
+    Optional key => values pairs in %params and their defaults
+
+    devicename  => ( RPi board revision == 1 ) 
+                    ? '/dev/i2c-0' : '/dev/i2c-1',
+    
+    address     => 0x20,
+
+    Example overriding defaults
+    
+    my $ext = HiPi::Interface::MCP23017->new(
+        devicename => '/dev/i2c-0',
+        address    => 0x28,
+    );</pre>
+<h5>my @bits = $ext->read_register_bits( $register, $numbytes );</h5>
+<pre>    Read an array of bit values ( 0 or 1 ) from the specified register.
+    
+    $numbytes is the number of bytes to read - defaults to 1
+    
+    # 1 byte ( 8 bits )
+    $bits[0] is populated from register bit 0 from the first byte
+    $bits[7] is populated from register bit 7 from the first byte
+    # 2 bytes ( 16 bits )
+    $bits[8] is populated from register bit 0 from the second byte
+
+    $register is a string containing the register name.
+    Valid values are:
+
+    'IODIRA', 'IPOLA', 'GPINTENA', 'DEFVALA', 'INTCONA',
+    'IOCON',  'GPPUA', 'INTFA',    'INTCAPA', 'GPIOA',
+    'OLATA',  'IODIRB','IPOLB',    'GPINTENB','DEFVALB', 
+    'INTCONB','GPPUB', 'INTFB',    'INTCAPB', 'GPIOB',
+    'OLATB'
+    
+    Examples:
+    
+    # get the value ( 1 or 0 ) for pin A0
+    
+    my @bits = $ext->read_register_bits('GPIOA');
+    my $a0value = $bits[0];
+
+    # get the value ( 1 or 0 ) for pin B6
+
+    my @bits = $ext->read_register_bits('GPIOB');
+    my $b6value = $bits[6];
+
+    # get the values for all 16 pins when registers
+    # are sequential
+    # i.e. ($ext->read_register_bits('IOCON'))[MCP23017_BANK] == 0;
+
+    my @bits = $ext->read_register_bits('GPIOA', 2);
+    
+    # $bits[1] will contain value for pin A0
+    # $bits[9] will contain value for pin B1
+
+    # note that you can return all the values from
+    # the entire MCP23017 register assuming
+    # default sequential read mode with
+
+    my @bits = $ext->read_register_bits('GPIOA', 22 );
+
+    # which values are in which bits will depend
+    # on the current IOCON.BANK value
+    # i.e. ($ext->read_register_bits('IOCON'))[MCP23017_BANK]
+    # consult the MCP23017 data sheet</pre>
+    
+<h5>$ext->write_register_bits( $register, @bits );</h5>
+<pre>    Write an array of bit values ( 0 or 1 ) to the specified register.
+    $bits[0] is written to register bit 0
+    $bits[7] is written to register bit 7
+
+    @bits can contain between 1 x 8 and 22 x 8 values
+    but writing the correct values for 22 * 8 bits 
+    at once seems an unlikely thing to want to do.
+    
+    $register is a string containing the register name.
+    Valid values are:
+
+    'IODIRA', 'IPOLA', 'GPINTENA', 'DEFVALA', 'INTCONA',
+    'IOCON',  'GPPUA', 'INTFA',    'INTCAPA', 'GPIOA',
+    'OLATA',  'IODIRB','IPOLB',    'GPINTENB','DEFVALB', 
+    'INTCONB','GPPUB', 'INTFB',    'INTCAPB', 'GPIOB',
+    'OLATB'
+
+    Examples :
+
+    # starting in default power on mode, set pin B3 as an
+    # output and set its value high.
+    # note that when writing single values, each operation
+    # is essentially a read / write
+    
+    # first set B3 as output
+    my @bits = $ext->read_register_bits( 'IODIRB' );
+ 
+    $bits[3] = 0; # the module provides the exported
+                  # constants MCP23017_OUTPUT and MCP23017_INPUT
+                  # which are very useful if you find using
+                  # 0 to define an output pin and 1 to
+                  # define an input pin confusing
+
+    $ext->write_register_bits( 'IODIRB', @bits );
+
+    # then set its value high
+    @bits = $ext->read_register_bits( 'GPIOB' );
+    $bits[3] = MCP23017_HIGH;
+    $ext->write_register_bits( 'GPIOB', @bits );
+
+    
+    # switch mode to IOCON.BANK=1 - segregated registers
+    my @bits = $ext->read_register_bits( 'IOCON' );
+    $bits[MCP23017_BANK] = 1;
+    $ext->write_register_bits( 'IOCON', @bits );
+
+    # ensure A5 is an input and apply pull up resistor
+    my @bits = $ext->read_register_bits( 'GPIOA' );
+    $bits[5] = MCP23017_INPUT;
+    $ext->write_register_bits( 'GPIOA', @bits );
+    @bits = $ext->read_register_bits( 'GPPUA' );
+    $bits[5] = 1;
+    $ext->write_register_bits( 'GPPUA', @bits );</pre>
+<h5>my @bytes = $ext->read_register_bytes( $register, $numbytes );</h5>
+<pre>    Read an array of bytes starting at the specified register.
+    $numbytes is the number of bytes to read - defaults to 1
+
+    $register is a string containing the register name.
+    Valid values are:
+
+    'IODIRA', 'IPOLA', 'GPINTENA', 'DEFVALA', 'INTCONA',
+    'IOCON',  'GPPUA', 'INTFA',    'INTCAPA', 'GPIOA',
+    'OLATA',  'IODIRB','IPOLB',    'GPINTENB','DEFVALB', 
+    'INTCONB','GPPUB', 'INTFB',    'INTCAPB', 'GPIOB',
+    'OLATB'
+    
+    It is often more convenient to use read_register_bits
+    which calls read_register_bytes internally and separates
+    the returned values into ordered bit values.
+    Calling read_register_bytes may be quicker if your
+    handling of the return values is more efficient than
+    read_register_bits.</pre>
+<h5>$ext->write_register_bytes( $register, @bytes );</h5>
+<pre>    Write an array of  1 or more bytes starting at the 
+    specified register.
+    
+    $register is a string containing the register name.
+    Valid values are:
+
+    'IODIRA', 'IPOLA', 'GPINTENA', 'DEFVALA', 'INTCONA',
+    'IOCON',  'GPPUA', 'INTFA',    'INTCAPA', 'GPIOA',
+    'OLATA',  'IODIRB','IPOLB',    'GPINTENB','DEFVALB', 
+    'INTCONB','GPPUB', 'INTFB',    'INTCAPB', 'GPIOB',
+    'OLATB'
+
+    It is often more convenient to use write_register_bits
+    which calls write_register_bytes internally.
+    Calling write_register_bytes may be quicker if your
+    creating of the byte values is more efficient than
+    write_register_bits.
+</pre>
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_mcp3008.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_interface_mcp49xx.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

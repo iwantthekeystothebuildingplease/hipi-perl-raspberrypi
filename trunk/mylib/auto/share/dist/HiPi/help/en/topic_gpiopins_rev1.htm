@@ -1,0 +1,248 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Raspberry Pi GPIO Pin Layout Rev 1</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_gpiopins.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_spidev.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Raspberry Pi GPIO Pin Layout Rev 1</H2><h3>Model B Revision 1.0 Boards</h3>
+<br>
+<p>This is the GPIO Pin layout for the original Model B Revision 1.0 boards. You can view the layout for the current <A HREF="topic_gpiopins.htm">Model A and Model B Revision 2.0 boards here.</A></p>
+<p>For each Pin on the Raspberry Pi breakout pads, the table provides the following detail:</p>
+<dl>
+<p> 
+<dd><b>Wiring</b> - This is the wiringPi pin number used with Gordon Henderson 's wiringPi library (http://projects.drogon.net/raspberry-pi/wiringpi/). See also : <A HREF="mod_gpio_wiring.htm">HiPi::Wiring</A>.</dd>
+</p>
+<p>
+<dd><b>GPIO</b> - This is the internal BCM2835 SOC GPIO pin number. It is the one that is used in the BCM2835 documentation and is the expected input for many of the HiPi modules. See also : <A HREF="mod_gpio_bcm2835.htm">HiPi::BCM2835</A>. The module <A HREF="mod_util_constant.htm">HiPi::Constant</A> provides useful constants for the GPIO pin numbers named for the Raspberry Pi physical header pin numbers.
+</dd>
+</p>
+
+<p>
+<dd><b>Name</b> - This is the common name. Where a kernel device driver uses pins by default, those pins are named for their default function.</dd></p>
+
+<p>
+<dd><b>Raspberry Pi</b> - notes the physical pin number on the GPIO header.</dd>
+</p>
+
+</dl>
+<br><br>
+
+<h5>GPIO PAD 1</h5>
+
+<code>
+<table>
+<tr>
+
+<td><font color="#808000"><b>Wiring</b></font></td>
+<td><font color="#00C000"><b>GPIO</b></font></td>
+<td align="center"><font color="#0000C0"><b>Name</b></font></td>
+<td colspan="2" align="center"><font color="#CC0040"><b>Raspberry Pi</b></font></td>
+
+<td align="center"><font color="#0000C0"><b>Name</b></font></td>
+<td align="right"><font color="#00C000"><b>GPIO</b></font></td>
+<td align="right"><font color="#808000"><b>Wiring</b></font></td>
+
+</tr>
+
+<tr>
+<td align="left" >--------</td>
+<td align="left" >------</td>
+<td align="right">----------</td>
+<td align="right">----</td>
+<td align="left" >----</td>
+<td align="left" >----------</td>
+<td align="right">------</td>
+<td align="right">--------</td>
+</tr>
+
+
+<tr>
+<td>-</td>
+<td>-</td>
+<td align="right">3V3</td>
+<td align="right">1</td>
+<td>2</td>
+<td>5V0</td>
+<td align="right">-</td>
+<td align="right">-</td>
+</tr>
+
+<tr>
+<td align="left" >8</td>
+<td align="left" >0</td>
+<td align="right">I2C0_SDA</td>
+<td align="right">3</td>
+<td align="left" >4</td>
+<td align="left" >DNC</td>
+<td align="right">-</td>
+<td align="right">-</td>
+</tr>
+
+<tr>
+<td align="left" >9</td>
+<td align="left" >1</td>
+<td align="right">I2C0_SCL</td>
+<td align="right">5</td>
+<td align="left" >6</td>
+<td align="left" >GND</td>
+<td align="right">-</td>
+<td align="right">-</td>
+</tr>
+
+<tr>
+<td align="left" >7</td>
+<td align="left" >4</td>
+<td align="right">GPIO_4</td>
+<td align="right">7</td>
+<td align="left" >8</td>
+<td align="left" >UART0_TXD</td>
+<td align="right">14</td>
+<td align="right">15</td>
+</tr>
+
+<tr>
+<td align="left" >-</td>
+<td align="left" >-</td>
+<td align="right">DNC</td>
+<td align="right">9</td>
+<td align="left" >10</td>
+<td align="left" >UART0_RXD</td>
+<td align="right">15</td>
+<td align="right">16</td>
+</tr>
+
+<tr>
+<td align="left" >0</td>
+<td align="left" >17</td>
+<td align="right">GPIO_17</td>
+<td align="right">11</td>
+<td align="left" >12</td>
+<td align="left" >GPIO_18</td>
+<td align="right">18</td>
+<td align="right">1</td>
+</tr>
+
+<tr>
+<td align="left" >2</td>
+<td align="left" >21</td>
+<td align="right">GPIO_21</td>
+<td align="right">13</td>
+<td align="left" >14</td>
+<td align="left" >DNC</td>
+<td align="right">-</td>
+<td align="right">-</td>
+</tr>
+
+<tr>
+<td align="left" >3</td>
+<td align="left" >22</td>
+<td align="right">GPIO_22</td>
+<td align="right">15</td>
+<td align="left" >16</td>
+<td align="left" >GPIO_23</td>
+<td align="right">23</td>
+<td align="right">4</td>
+</tr>
+
+<tr>
+<td align="left" >-</td>
+<td align="left" >-</td>
+<td align="right">DNC</td>
+<td align="right">17</td>
+<td align="left" >18</td>
+<td align="left" >GPIO_24</td>
+<td align="right">24</td>
+<td align="right">5</td>
+</tr>
+
+<tr>
+<td align="left" >12</td>
+<td align="left" >10</td>
+<td align="right">SPI0_MOSI</td>
+<td align="right">19</td>
+<td align="left" >20</td>
+<td align="left" >GND</td>
+<td align="right">-</td>
+<td align="right">-</td>
+</tr>
+
+<tr>
+<td align="left" >13</td>
+<td align="left" >9</td>
+<td align="right">SPI0_MISO</td>
+<td align="right">21</td>
+<td align="left" >22</td>
+<td align="left" >GPIO_25</td>
+<td align="right">25</td>
+<td align="right">6</td>
+</tr>
+
+<tr>
+<td align="left" >14</td>
+<td align="left" >11</td>
+<td align="right">SPI0_SCLK</td>
+<td align="right">23</td>
+<td align="left" >24</td>
+<td align="left" >SPI0_CE0_N</td>
+<td align="right">8</td>
+<td align="right">10</td>
+</tr>
+
+<tr>
+<td align="left" >-</td>
+<td align="left" >-</td>
+<td align="right">DNC</td>
+<td align="right">25</td>
+<td align="left" >26</td>
+<td align="left" >SPI0_CE1_N</td>
+<td align="right">7</td>
+<td align="right">11</td>
+</tr>
+
+</table>
+</code></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="topic.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="topic_gpiopins.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="topic_spidev.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

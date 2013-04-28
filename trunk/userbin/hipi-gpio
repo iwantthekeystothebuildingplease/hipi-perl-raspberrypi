@@ -1,0 +1,67 @@
+#!/usr/bin/perl
+
+#########################################################################################
+# Description:  Perform GPIO export & interrupt setting for HiPi::Wiring
+# Created       Sat Feb 23 20:29:22 2013
+# svn id        $Id: hipi-gpio.pl 1559 2013-03-19 05:06:43Z Mark Dootson $
+# Copyright:    Copyright (c) 2013 Mark Dootson
+# Licence:      This work is free software; you can redistribute it and/or modify it 
+#               under the terms of the GNU General Public License as published by the 
+#               Free Software Foundation; either version 3 of the License, or any later 
+#               version.
+#########################################################################################
+
+use 5.14.0;
+use strict;
+use warnings;
+use HiPi::Wiring;
+use Fcntl;
+
+our $VERSION ='0.33';
+
+my($action, $wiringpinno, $intmode ) = @ARGV;
+
+if($action ne 'edge' ) {
+    die 'Incorrect calling convention';
+}
+
+our ($confirmedmode, $gpiopin);
+
+if( $intmode =~ /^(none|falling|rising|both)$/ ) {
+    $confirmedmode = $1;
+} else {
+    die qq(Incorrect interrupt mode : $intmode);
+}
+
+$gpiopin = HiPi::Wiring::wpiPinToGpio($wiringpinno);
+
+#---------------------------------------------------
+# Export the pin and set direction to input
+#---------------------------------------------------
+
+my ($expfh, $edgfh, $dirfh);
+my $expfile = qq(/sys/class/gpio/export);
+my $pindir  = qq(/sys/class/gpio/gpio${gpiopin});
+my $dirfile = qq($pindir/direction);
+my $edgfile = qq($pindir/edge);
+my $valfile = qq($pindir/value);
+my $actfile = qq($pindir/active_low);
+
+unless( -d $pindir && -f $dirfile && -f $edgfile && -f $valfile) {
+    sysopen($expfh, $expfile, O_WRONLY ) or die qq(failed to open sysfs export file for pin $gpiopin : $!);
+    syswrite($expfh, $gpiopin);
+    close($expfh);
+    sysopen($dirfh, $dirfile, O_WRONLY ) or die qq(failed to open sysfs direction file for pin $gpiopin : $!);
+    syswrite($dirfh, 'in');
+    close($dirfh);
+}
+
+#---------------------------------------------------
+# Set Interrupt
+#---------------------------------------------------
+
+sysopen($edgfh, $dirfile, O_WRONLY ) or die qq(failed to open sysfs edge file for pin $gpiopin : $!);
+syswrite($edgfh, $confirmedmode);
+close($edgfh);
+
+1;

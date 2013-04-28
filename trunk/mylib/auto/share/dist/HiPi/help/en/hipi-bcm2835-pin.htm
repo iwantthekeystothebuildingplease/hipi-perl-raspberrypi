@@ -1,0 +1,73 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::BCM2835::Pin</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_gpio_bcm2835.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_gpio_bcm2835.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_gpio_wiring.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::BCM2835::Pin</H2><p>HiPi::BCM2835::Pin provides an implementation of <A HREF="hipi-pin.htm">HiPi::Pin</A> for the <A HREF="mod_gpio_bcm2835.htm">HiPi::BCM2835</A><p>
+<p>The module inherits all of its methods from <A HREF="hipi-pin.htm">HiPi::Pin</A>.</p>
+<h3>Example Usage</h3>
+<pre>
+use 5.14.0; # for say
+use HiPi::BCM2835;
+use HiPi::Constant qw( :raspberry );
+
+my $bcm  = HiPi::BCM2835->new();
+my $pin  = $bcm->get_pin( RPI_PAD1_PIN_11 );
+my $mode = $pin->mode();
+
+if( $mode & RPI_PINMODE_OUTP ) {
+    # set high
+    $pin->value(1);
+} elsif(  $mode & RPI_PINMODE_INPT ) { 
+    say q(Current Pin Value is :) . $pin->value();
+
+    # set rising edge interrupt
+    $pin->interrupt( RPI_INT_RISE );
+}
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_gpio_bcm2835.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_gpio_bcm2835.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_gpio_wiring.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>
