@@ -19,10 +19,9 @@ use warnings;
 use Carp;
 require Exporter;
 use base qw( Exporter );
+use XSLoader;
 
 our $VERSION ='0.33';
-
-XSLoader::load('HiPi::Utils', $VERSION) if is_raspberry();
 
 our $defaultuser = 'pi';
 
@@ -78,6 +77,8 @@ our ($_israspberry, $_isunix, $_iswindows, $_ismac, $_homedir) = (0,0,0,0, '');
     }
     
 }
+
+XSLoader::load('HiPi::Utils', $VERSION) if is_raspberry();
 
 sub is_raspberry { $_israspberry; }
 sub is_windows { $_iswindows; }
@@ -347,7 +348,6 @@ sub set_modprobe_conf {
     HiPi::Device::SPI->set_bufsiz($rh->{spidev}->{bufsiz});
 
 }
-
 
 sub drop_permissions_name {
     my($username, $groupname) = @_;

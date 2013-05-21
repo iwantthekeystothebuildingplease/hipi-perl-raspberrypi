@@ -100,6 +100,7 @@ sub hipi_check_perms {
 sub hipi_do_update {
     my $self = shift;
     return unless $self->notes('doupdate');
+    return if $self->notes('cpanskip');
     
     my $statefile = 'update.mksf';
     return if $self->up_to_date( 'Build', $statefile );
@@ -112,7 +113,7 @@ sub hipi_do_update {
 
 sub hipi_do_depends {
     my $self = shift;
-    
+    return if $self->notes('cpanskip');
     my $statefile = 'depends.mksf';
     return if $self->up_to_date( 'Build', $statefile );
     
@@ -159,6 +160,7 @@ sub hipi_do_depends {
 sub hipi_do_wx {
     my $self = shift;
     return unless $self->notes('dowx');
+    return if $self->notes('cpanskip');
     
     my $statefile = 'wxperl.mksf';
     return if $self->up_to_date( 'Build', $statefile );
@@ -173,8 +175,8 @@ sub hipi_do_wx {
         require Alien::wxWidgets;
         Alien::wxWidgets->import;
         my $widgversion = Alien::wxWidgets->version;
-        # require version 0.9917 and 2.009004
-        if( $wxversion > 0.9916 && $widgversion > 2.009003 ) {
+        # require version 0.9922 and 2.009004
+        if( $wxversion > 0.9921 && $widgversion > 2.009003 ) {
             $wxrequired = 0;
         }
     };
@@ -359,6 +361,7 @@ sub hipi_build_xs {
 
 sub hipi_build_execs {
     my $self = shift;
+    return if $self->notes('cpanskip');
     return if $self->up_to_date(
         [ 'Build', 'suidbin/hipi-i2c.pl', 'suidbin/hipi-pud.pl' ],
         [ 'suidbin/hipi-i2c', 'suidbin/hipi-pud' ]
@@ -382,6 +385,7 @@ sub hipi_build_data {
 
 sub hipi_install_scriptfiles {
     my $self = shift;
+    return if $self->notes('cpanskip');
     
     my $supg = hipi_check_perms();
     
@@ -421,6 +425,7 @@ sub hipi_install_scriptfiles {
 
 sub hipi_install_groups {
     my $self = shift;
+    return if $self->notes('cpanskip');
     for my $group ( qw( i2c spi gpio ) ) {
         system(qq(sudo groupadd -f -r $group));
     }

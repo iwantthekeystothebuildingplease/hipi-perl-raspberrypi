@@ -18,8 +18,11 @@ use UNIVERSAL::require;
 
 our $VERSION ='0.33';
 
-our $rooturl = 'http://raspberrypi.znix.com/hipifiles';
-our $tmproot   = '/var/tmp/_hipiupgrade';
+our $installer  = 'hipi-install';
+our $installurl = qq(http://raspberrypi.znix.com/hipifiles/$installer);
+our $versionurl = 'http://raspberrypi.znix.com/hipifiles/latest.txt';
+ 
+our $tmproot    = '/var/tmp/_hipiupgrade';
 
 sub upgrade {
     my $latest = get_latest_version();
@@ -37,10 +40,9 @@ sub upgrade {
 sub get_latest_version {
     my $content;
     {
-        my $url = qq($rooturl/latest.txt);
         $ua->env_proxy;
         $ua->timeout(10);    
-        $content = get($url);
+        $content = get($versionurl);
     }
     if(!defined($content) ) {
         exitclean('The HiPi web site is unavailable or could not be reached.');
@@ -64,15 +66,15 @@ sub do_install {
     qx(rm -rf $tmproot) if -e $tmproot;
     mkdir($tmproot, 0777) or exitclean('could not create temporary install directory');
     chdir($tmproot) or exitclean('could not enter temporary install directory');
-    my $sourcefile = qq($rooturl/hipi-install);
-    system(qq(wget $rooturl/hipi-install)) and exitclean('Failed to download install script');
+
+    system(qq(wget $installurl)) and exitclean('Failed to download install script');
     
     # As this is an upgrade, don't upgrade Wx if it is not already installed
     my $class = 'Wx::Mini';
     if( $class->require ) {
-        system(qq($^X hipi-install));
+        system(qq($^X $installer));
     } else {
-        system(qq($^X hipi-install --hipi-wx=0));
+        system(qq($^X $installer --hipi-wx=0));
     }
 }
 

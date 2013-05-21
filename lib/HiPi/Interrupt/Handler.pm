@@ -22,6 +22,8 @@ use Carp;
 use HiPi::Interrupt::Message;
 use Time::HiRes;
 
+our $VERSION = '0.33';
+
 __PACKAGE__->create_accessors( qw(
     docontinue
     timeout
@@ -95,6 +97,12 @@ sub stop {
 sub sleep_timeout {
     my($self, $millisecs) = @_;
     Time::HiRes::usleep( int($millisecs * 1000) );
+}
+
+sub get_timestamp {
+    my ($secs, $msecs) = Time::HiRes::gettimeofday();
+    my $timestamp = ($secs * 1000) + int($msecs / 1000);
+    return( $timestamp );
 }
 
 sub poll {

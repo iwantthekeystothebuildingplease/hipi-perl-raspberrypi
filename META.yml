@@ -211,6 +211,12 @@ provides:
   HiPi::Interface::DS18X20:
     file: lib/HiPi/Interface/DS18X20.pm
     version: 0.22
+  HiPi::Interface::GPS::NMEA:
+    file: lib/HiPi/Interface/GPS/NMEA.pm
+    version: 0.33
+  HiPi::Interface::GPS::SRF:
+    file: lib/HiPi/Interface/GPS/SRF.pm
+    version: 0.33
   HiPi::Interface::HD44780:
     file: lib/HiPi/Interface/HD44780.pm
     version: 0.20
@@ -252,7 +258,7 @@ provides:
     version: 0
   HiPi::Interrupt::Handler:
     file: lib/HiPi/Interrupt/Handler.pm
-    version: 0
+    version: 0.33
   HiPi::Interrupt::Message:
     file: lib/HiPi/Interrupt/Message.pm
     version: 0
@@ -349,6 +355,29 @@ provides:
   HiPi::Wx::Validator::SetValue:
     file: lib/HiPi/Wx/Validator/SetValue.pm
     version: 0.22
+requires:
+  Class::Accessor: 0
+  Device::SerialPort: 0
+  ExtUtils::ParseXS: 0
+  ExtUtils::XSpp: 0
+  File::Copy::Recursive: 0
+  File::Slurp: 0
+  File::chdir: 0
+  IO::Epoll: 0
+  IO::Multiplex: 0
+  IO::String: 0
+  IO::Stringy: 0
+  LWP::UserAgent: 0
+  Module::Info: 0
+  OpenGL: 0
+  PAR::Dist: 0
+  Text::Diff: 0
+  Text::Patch: 0
+  Thread::Queue: 0
+  Try::Tiny: 0
+  UNIVERSAL::require: 0
+  threads: 0
+  threads::shared: 0
 resources:
   homepage: http://raspberry.znix.com/
   license: http://www.gnu.org/licenses/gpl-3.0.txt

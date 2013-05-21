@@ -86,6 +86,8 @@ lib/HiPi/Device/SPI.pm
 lib/HiPi/Dummy/BCM2835.pm
 lib/HiPi/Interface.pm
 lib/HiPi/Interface/DS18X20.pm
+lib/HiPi/Interface/GPS/NMEA.pm
+lib/HiPi/Interface/GPS/SRF.pm
 lib/HiPi/Interface/HD44780.pm
 lib/HiPi/Interface/HTADCI2C.pm
 lib/HiPi/Interface/HTBackpackV2.pm
