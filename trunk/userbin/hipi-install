@@ -13,10 +13,12 @@
 
 use strict;
 use warnings;
+use LWP::Simple qw( :DEFAULT $ua );
 
 our $VERSION ='0.33';
 
-our $rooturl = 'http://raspberrypi.znix.com/hipifiles';
+our $rooturl   = 'http://hipi-perl-raspberrypi.googlecode.com/files';
+our $stableurl = 'http://raspberrypi.znix.com/hipifiles/latest.txt';
 our $tmproot   = '/var/tmp/_hipiinstall';
 
 sub get_args {
@@ -51,11 +53,14 @@ sub do_install {
     qx(rm -rf $tmproot) if -e $tmproot;
     mkdir($tmproot, 0777) or exitclean('could not create temporary install directory');
     chdir($tmproot) or exitclean('could not enter temporary install directory');
-    my $sourcefile = qq($rooturl/hipi-latest.tar.gz);
+    
+    my ($sourcename, $sourcefile, $sourceurl) = get_latest_version_file();
     plog('Downloading latest source');
-    system(qq(wget $sourcefile)) and exitclean('Failed to download latest tarball');
-    system(qq(tar -xvzf hipi-latest.tar.gz)) and exitclean('Failed to extract latest tarball');
-    chdir('hipi-latest') or exitclean('could not enter extracted source directory');
+    system(qq(rm -rf $sourcename));
+    system(qq(rm $sourcefile));
+    system(qq(wget $sourceurl)) and exitclean('Failed to download latest tarball');
+    system(qq(tar -xvzf $sourcefile)) and exitclean('Failed to extract latest tarball');
+    chdir($sourcename) or exitclean('could not enter extracted source directory');
     my $bldargs = get_args();
     
     my $bldcmd = qq($^X Build.PL $bldargs);
@@ -65,6 +70,24 @@ sub do_install {
     system(qq(${sudo}$^X Build install)) and exitclean('Failed to run perl Build install');
     plog('HiPi Modules have been installed');
     exitclean();
+}
+
+sub get_latest_version_file {
+    my $content;
+    {
+        $ua->env_proxy;
+        $ua->timeout(10);    
+        $content = get($stableurl);
+    }
+    if(!defined($content) ) {
+        exitclean('The HiPi web site is unavailable or could not be reached.');
+    }
+    chomp($content);
+    my $sourcename = qq(HiPi-${content});
+    my $sourcefile = $sourcename . '.tar.gz';
+    my $sourceurl = $rooturl . '/' . $sourcefile;
+    
+    return ($sourcename, $sourcefile, $sourceurl);
 }
 
 sub exitclean {

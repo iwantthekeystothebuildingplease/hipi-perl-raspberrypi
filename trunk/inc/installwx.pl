@@ -17,7 +17,7 @@ use PAR::Dist;
 our $archname  = $Config{archname};
 our $instarchpath = $Config{sitearchexp};
 
-our $rooturl = 'http://raspberrypi.znix.com/hipifiles';
+our $rooturl   = 'http://hipi-perl-raspberrypi.googlecode.com/files';
 
 #---------------------------------------
 # Install Alien::wxWidgets
@@ -73,7 +73,7 @@ log_info( qq(Installing Alien::wxWidgets\n) );
 log_info( qq(Installing Wx\n) );
 
 {
-    install_par(qq($rooturl/Wx-0.9917-$archname-5.14.2.par));
+    install_par(qq($rooturl/Wx-0.9922-$archname-5.14.2.par));
 }
 
 #---------------------------------------
@@ -83,7 +83,7 @@ log_info( qq(Installing Wx\n) );
 log_info( qq(Installing Wx::Demo\n) );
 
 {
-    install_par(qq($rooturl/Wx-Demo-0.19-$archname-5.14.2.par));
+    install_par(qq($rooturl/Wx-Demo-0.21-$archname-5.14.2.par));
 }
 
 #---------------------------------------

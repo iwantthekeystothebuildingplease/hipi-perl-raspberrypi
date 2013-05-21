@@ -75,6 +75,37 @@ use constant {
     $EXPORT_TAGS{wiring}  = \@const;
 }
 
+# Perl implemented functions
+
+sub serialPrintf {
+    my ($filedesc, $format, @args) = @_;
+    
+    my $buffer;
+    
+    if( @args ) {
+        $buffer = sprintf($format, @args);
+    } else {
+        $buffer = $format;
+    }
+    
+    HiPi::Wiring::serialPuts( $filedesc, $buffer );
+    return undef;
+}
+
+sub lcdPrintf {
+    my ($filedesc, $format, @args) = @_;
+    
+    my $buffer;
+    
+    if( @args ) {
+        $buffer = sprintf($format, @args);
+    } else {
+        $buffer = $format;
+    }
+    
+    HiPi::Wiring::lcdPuts( $filedesc, $buffer );
+    return undef;
+}
 
 1;
 

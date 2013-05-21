@@ -82,6 +82,17 @@ sub write {
     my $result = $self->serialdriver->write($buffer);
     $self->serialdriver->write_drain;
     return $result;
+}
+
+sub can_read {
+    my $self = shift;
+}
+
+sub read {
+    my($self, $timeout) = @_;
+    $timeout ||= 0;
+    
+    
     
 }
 

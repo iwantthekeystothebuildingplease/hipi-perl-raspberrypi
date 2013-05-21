@@ -66,6 +66,9 @@ $handler->remove_pin($pinnumber);</h3>
 <h3>$handler->register_callback( $cbname, $coderef );</h3>
 <p>Rather than create your own class derived from HiPi::Interrupt::Handler, you can create an instance of HiPi::Interrupt::Handler directly and register callback subroutines to receive notifications. The code reference specified in $coderef will be called with the same parameters described in the Notification Methods below for the relevant $cbname. Possible values for $cbname are <br><I>start, continue, interrupt, error, add, remove, stop</I>.</p>
 
+<h3>$handler->get_timestamp();</h3>
+<p>A convenience method that returns milliseconds since the Unix epoch. It is a simple wrapper around Time::HiRes::gettimeofday()</p>
+
 <h2>Overridable Notification Methods</h2>
 <h3>on_start ( $handler )</h3>
 <p>on_start is called once immediately after $handler->poll is called.</p>
@@ -94,7 +97,7 @@ $handler->remove_pin($pinnumber);</h3>
 </dl>
 
 <h3>on_continue ( $handler, $actions )</h3>
-<p>Called periodically so that you may run code when no interrupts are occuring. Can be treated as a 'heartbeat' method.</p>
+<p>Called periodically so that you may run code when no interrupts are occuring. Can be treated as a 'heartbeat' method. You can use $handler->get_timestamp to return milliseconds since the Unix epoch and store the value if you wish to carry out actions at a specific time offset.</p>
 <p><dl>
 <p><dd><b>$handler</b>  Your HiPi::Interrupt::Handler instance.</dd></p>
 <p><dd><b>$actions</b>  The number of interrupts handled since the last call to on_continue.</dd></p>
