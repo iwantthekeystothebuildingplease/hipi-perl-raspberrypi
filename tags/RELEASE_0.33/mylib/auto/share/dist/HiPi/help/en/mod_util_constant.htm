@@ -1,0 +1,173 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Constant</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_util.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_util_raspberrypi.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util_lang.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Constant</H2><p>This module exports useful constants to make your code easier to create and maintain.<p>
+<p>Constants can be imported using</p>
+<p><code>use HiPi::Constant qw( :<I>tagname</I> :<I>tagname2</I> :<I>tagname3</I> );</code> </p>
+<pre>
+
+tag :raspberry
+
+    # for setting pin levels
+
+    RPI_HIGH 
+    RPI_LOW 
+
+    # set to 1 or 2  according to
+    # 1 for Model B Revision 1 boards
+    # 2 for anything else
+
+    RPI_BOARD_REVISION
+
+    # GPIO Pad pin numbers for passing anywhere a function
+    # or method expects a BCM GPIO Pin identifier
+    # See: <A HREF="topic_gpiopins.htm">Raspberry Pi Pin Layout</A>
+
+    RPI_PAD1_PIN_3 
+    RPI_PAD1_PIN_5 
+    RPI_PAD1_PIN_7 
+    RPI_PAD1_PIN_8 
+    RPI_PAD1_PIN_10 
+    RPI_PAD1_PIN_11 
+    RPI_PAD1_PIN_12
+    RPI_PAD1_PIN_13
+    RPI_PAD1_PIN_15
+    RPI_PAD1_PIN_16
+    RPI_PAD1_PIN_18
+    RPI_PAD1_PIN_19
+    RPI_PAD1_PIN_21 
+    RPI_PAD1_PIN_22
+    RPI_PAD1_PIN_23
+    RPI_PAD1_PIN_24 
+    RPI_PAD1_PIN_26
+
+    RPI_PAD5_PIN_3 
+    RPI_PAD5_PIN_4 
+    RPI_PAD5_PIN_5 
+    RPI_PAD5_PIN_6
+
+    # mask values for use with classes derived from
+    # HiPi::Pin
+    
+    RPI_INT_NONE
+    RPI_INT_FALL 
+    RPI_INT_RISE
+    RPI_INT_BOTH
+    RPI_INT_AFALL
+    RPI_INT_ARISE 
+    RPI_INT_HIGH
+    RPI_INT_LOW
+
+    # function values for use with classes derived from
+    # HiPi::Pin
+    
+    RPI_PINMODE_INPT 
+    RPI_PINMODE_OUTP
+    RPI_PINMODE_ALT0
+    RPI_PINMODE_ALT1
+    RPI_PINMODE_ALT2
+    RPI_PINMODE_ALT3
+    RPI_PINMODE_ALT4
+    RPI_PINMODE_ALT5
+
+    # Pull Up / Down setting
+
+    RPI_PUD_NULL
+    RPI_PUD_OFF
+    RPI_PUD_DOWN
+    RPI_PUD_UP
+
+tag :i2c
+
+    # GPIO pin identifiers using i2c pin names
+
+    I2C0_SDA 
+    I2C0_SCL
+    I2C1_SDA
+    I2C1_SCL
+
+tag :serial
+    
+    # GPIO pin identifiers using UART names
+    
+    UART0_TXD 
+    UART0_RXD 
+    UART0_RTS 
+    UART0_CTS
+    UART1_TXD
+    UART1_RXD 
+    UART1_RTS
+    UART1_CTS
+
+tag :spi
+    
+    # GPIO pin identifiers using SPI names
+    
+    SPI0_MOSI 
+    SPI0_MISO 
+    SPI0_CLK 
+    SPI0_CE0_N
+    SPI0_CE1_N
+
+tag :gpclock
+
+    # GPIO pin identifiers using gpclock pin names.
+   
+    GPCLK0 
+    GPCLK1
+
+tag :pwm
+
+    # GPIO pin identifiers using PWM pin name.
+     
+    PWM0
+
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_util.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_util_raspberrypi.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util_lang.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

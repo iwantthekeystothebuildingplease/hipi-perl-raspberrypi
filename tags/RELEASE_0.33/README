@@ -1,0 +1,24 @@
+-----------------------------------------------------------------
+ Introduction
+-----------------------------------------------------------------
+
+HiPi provides interfaces to the Raspberry Pi GPIO together with
+wrappers for some common libraries and peripherals.
+
+It provides a Wx GUI application for managing some kernel device
+drivers and setting the GPIO pin properties.
+
+----------------------------------------------------------------
+ Installation
+----------------------------------------------------------------
+
+see the INSTALL file.
+
+---------------------------------------------------------------
+ Licence
+---------------------------------------------------------------
+
+This work is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published
+by the Free Software Foundation; either version 3 of the License,
+or any later version.

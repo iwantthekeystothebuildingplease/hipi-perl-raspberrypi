@@ -1,0 +1,168 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi I2C Utility</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="command_line_utils.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="command_line_utils.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="command_line_utils_pud.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi I2C Utility</H2><p>The <A HREF="mod_gpio_bcm2835_i2c.htm">HiPi::BCM2835::I2C</A> module provides access to i2c devices including those that require repeated start signals before a read can take place. It also allows you to enable or disable individual i2c buses so that for Model B Rev 2 and Model A boards you can enable a second i2c bus on the P5 header. ( see :<A HREF="topic_i2cbus_2.htm">Second I2C Bus</A>).</p>
+<p>To allow access to this facility from outside your Perl scripts HiPi modules installs a utility application <B>hipi-i2c</B> ( <code>/usr/local/bin/hipi-i2c</code> ).</p>
+<p>The utility is installed with setuid permission so allways runs as root allowing the necessary access to the i2c hardware peripherals on the Pi.</p>
+<p>The calling process user must be a member of the group <B>i2c</B> to execute the utility.</p>
+<p>You can manage group membership with the <A HREF="control_app_i2cdev.htm">HiPi Control Gui</A>.</p>
+<p>&nbsp;</p>
+<h3>Command Line Help</h3><pre>
+usage : hipi-i2c MODE I2C [ADDRESS] [REGISTER] [BAUDRATE] [ARG1 ARG2 ARG3]
+    
+    MODE     = w[rite] | r[read] | h[elp] | b[aud] | e[nable]
+    
+    I2C      = 0 | 1   The i2c perphipheral to use
+    
+    ADDRESS  = The device address on the i2c bus when mode r|w
+    
+    REGISTER = The register on the device you wish
+               to write to / read from when mode r|w
+    
+    BAUDRATE = Baudrate for I2C ( only root may change baudrate);
+    
+    ARG1,2,n = additional arguments
+    
+Examples:
+    
+We have a device at address 0x3A on the I2C-1 peripheral. (default for 
+Model B Revision 2.0 and Model A boards.)
+      
+write one byte (0xFF) to register 0x02
+
+        hipi-i2c w 1 0x3A 0x02 0xFF
+        
+write just the register address (0x02) to the device
+
+        hipi-i2c w 1 0x3A 0x02
+        
+write 3 bytes (0xFF, 0xFE, 0x11) to register 0x02
+
+        hipi-i2c w 1 0x3A 0x02 0xFF 0xFE 0x11
+        
+read 1 byte starting at register 0x09
+
+        hipi-i2c r 1 0x3A 0x09 1
+        
+read 24 bytes starting at register 0x09
+
+        hipi-i2c r 1 0x3A 0x09 24
+      
+set baudrate to 400000 on I2C peripheral 1
+
+        sudo hipi-i2c b 1 400000
+
+get current baudrate on I2C peripheral 1
+
+        hipi-i2c b 1
+
+enable i2c bus 1
+        hipi-i2c e 1 1
+      
+enable i2c bus 0
+        hipi-i2c e 0 1
+    
+disable i2c bus 0
+        hipi-i2c e 0 0
+
+Calls to read return a list of space separated byte values on
+stdout.
+
+Calls to write return the number of bytes written on stdout. 
+The register address passed to the write command counts as 
+one byte (it is possible to write only the register address)
+so the command 
+
+    hipi-i2c w 1 0x3A 0x02 0xFF
+
+will return '2' on success.
+
+Calls to baud, whether set or get, always return the baudrate 
+from the hardware peripheral on stdout. Because the baudrate 
+is converted to a divider for the system clock on set, and then
+converted back to a baudrate on get, the number you get back 
+will not always be exactly the number that you set.
+
+Allowed baudrate settings are in the range 500 to 1600000 ( near
+the maximum the Broadcom peripheral supports). You may see 
+problems at speeds over 1MHz ( 1000000 ) even if your device
+claims to support it.
+
+Common values for baudrate are:
+
+ 100000  - the i2c standard
+ 400000  - fast i2c standard
+1000000  - seems to be the fastest reliable speed that this
+           implementation supports. Of course, all the 
+           devices on your bus must support this too.
+  32000  - the Broadcom I2C peripherals don't support
+           clock stretching so if you have a device that
+           employs this, a baudrate of 32000 ( or perhaps
+           even lower ) will often allow the device to work. 
+
+Calls to enable allow you to disable and enable the available 
+I2C buses. Parameters are
+    e(command) bus(0 or 1) enable(0 or 1)
+So to disable bus 1
+
+    hipi-i2c e 1 0
+
+to enable bus 0
+
+    hipi-i2c e 0 1
+
+See also : <A HREF="topic_i2cbus_2.htm">Second I2C Bus</A>
+
+On error, the utility will exit with a none zero value.
+
+
+</pre>
+ </FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="command_line_utils.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="command_line_utils.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="command_line_utils_pud.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

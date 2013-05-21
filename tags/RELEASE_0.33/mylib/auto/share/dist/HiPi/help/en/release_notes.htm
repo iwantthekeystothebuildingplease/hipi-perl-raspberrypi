@@ -1,0 +1,121 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Release Notes</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+
+<A HREF="installation.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="license.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Release Notes</H2><pre>
+Version 0.33  - 20 May 2013
+              - Fixed regression in 0.32 breaking uid and gid settings
+              - Add build options to avoid apt calls during cpan tests
+              - changed location of downloads to Google Code
+              - Wx version updated to 0.9922
+              - Wx::Demo version updated to 0.21
+
+Version 0.32  - 26 April 2013
+              - Added GPIO interrupt handling classes
+              - Many fixes for HiPi::Device::GPIO::Pin
+              
+Version 0.31  - Unreleassed development version  
+
+Version 0.30  - Unreleassed development version  
+
+Version 0.29  - 23 April 2013
+              - hipi-pud utility added to support setting of PUD resistors
+              - set_pud method added to all HiPi::Pin modules allowing
+                setting of pull up / pull down resistors from usercode.
+
+Version 0.28  - 23 April 2013
+              - bug fixes for HiPi::Device::GPIO::Pin
+
+Version 0.27  - 08 April 2013
+              - Using second I2C channel on P5 now tested and supported
+              - HiPi::BCM2835::I2C now supports per-instance transfer rates
+              - hipi-i2c utility extended to support en/disable of i2c buses
+              - GPIO PAD 5 documentation and GUI App display had 3V3 and 5V0
+                pins reversed.
+
+Version 0.26  - 23 March 2013
+              - Bug in HiPi::BCM2835::I2C->set_baudrate caused peripheral 1
+                value to always be set regardless of peripheral specified.
+              - Added i2c_write_error / bus_write_error to allow case where
+                i2c error condition expected. e.g. when a device has a
+                sofware reset and does not complete the i2c transaction
+                when reset command is sent.
+              - Standardised error handling across all three i2c interfaces.
+              - HiPi::Interface::MPL3115A2 added mode, active, oversample
+                and now uses delay based on oversample rate.
+
+Version 0.25  - 19 March 2013
+              - fixed bug in hipi-i2c installation
+
+Version 0.24  - 19 March 2013
+              - Added hipi-i2c command line utility to allow none Perl code
+                access to i2c commands.
+              - All calls to external programs ( cat, echo etc. ) are now
+                taint safe.
+              - Installation now always does an apt-get update before 
+                apt-get install (depedency list). My test builds
+                often fail at dependency installation time if apt-get update
+                is not executed. 
+                
+Version 0.23  - 18 March 2013
+              - bug in i2c C code fixed.
+              
+Version 0.22  - 17 March 2013
+              - Added i2c interface to HiPi::Device::I2C (in addition to SMBus)
+              - Added HiPi::BCM2835::I2C - i2c using registers direcly
+              - Added HiPi::Interface::MPL3115A2 - to demonstrate repeated
+                start operation using HiPi::BCM2835::I2C
+              - Updated all i2c using interface modules to accept smbus, i2c
+                or bcm2835 backends
+                
+Version 0.21  - 12 March 2013
+              - HiPi::Device::OneWire read bug fixed
+              - PWM Pin setting fixed in Control App
+              
+Version 0.20  - 11 March 2013
+              - Refactored HiPi module tree</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+
+<A HREF="installation.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="license.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

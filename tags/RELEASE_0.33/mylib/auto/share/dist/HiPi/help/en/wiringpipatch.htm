@@ -1,0 +1,122 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Wiring Pi Patch</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_gpio_wiring.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_gpio_wiring.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_gpio_bcm2835_i2c.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Wiring Pi Patch</H2><p>A patch is applied to the wiringPi source and is included below. The intention of the patch is:</p>
+<h5>Makefile</h5>
+<p>wiringPi is built as a static library for HiPi::Wiring. I found that the brackets in the line</p>
+<p><code>@echo "[Link (Static)]"</code></p>
+<p>caused the build to fail when the Makefile is called from within the Perl based build process.</p>
+<p>It was also necessary to add on the i2c objects for the static build.</p>
+<p>Finally, I removed the static definition of CC as for some versions of Perl I want to pass in a specific gcc version - e.g. gcc-4.7 - as a parameter to make.</p>
+<h5>wiringPi.c</h5>
+<p>Within one function the wiringPi library makes a single call to the external program <I><B>gpio</B></I> which is part of the full wiringPi distribution. I do not want to stomp on any user installation of wiringPi so the HiPi::Wiring distribution does not build or install gpio. I implemented a simple script to emulate the single function call to gpio and the wiringPi code in the static build for HiPi::Wiring now calls that instead.</p>
+<p>Users are recommended to install the full wiringPi library anyway as they will find the gpio utility useful and regular visits to Gordon's site will reward with a wealth of information and tips. I did not, however, want to make this a prerequisite of building the HiPi::Wiring module.</p>
+<h5>wiringPiI2C.c</h5>
+<p>To avoid confusion ( possibly only mine ) over which i2c header to use, I have included the required i2c header in the distribution. The file wiringPiI2C.c is patched to include this. From my research on the webternet, it seems other users experience confusion over the version of i2c_dev.h that gets included. One is provided by the kernel headers and one by the i2c-tools headers. We need the i2c-tools version. It maybe that in reality there is no confusion at all - I just haven't investigated properly. When in doubt, use brute force.<p>
+
+<hr>
+<h5>wiring.patch</h5>
+<pre>
+diff -ruNw srcc/wiringPi/wiringPi/Makefile copy/wiringPi/Makefile
+--- srcc/wiringPi/Makefile	2013-02-23 02:18:48.353400000 +0000
++++ copy/wiringPi/Makefile	2013-02-23 05:16:14.427400000 +0000
+@@ -33,7 +33,7 @@
+ 
+ #DEBUG	= -g -O0
+ DEBUG	= -O2
+-CC	= gcc
++#CC	= gcc
+ INCLUDE	= -I.
+ CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe -fPIC
+ 
+@@ -59,14 +59,14 @@
+ 
+ static:		$(STATIC)
+ 
+-$(STATIC):	$(OBJ)
+-	@echo "[Link (Static)]"
+-	@ar rcs $(STATIC) $(OBJ)
++$(STATIC):	$(OBJ) $(OBJ_I2C)
++	@echo "[Link Static]"
++	@ar rcs $(STATIC) $(OBJ) $(OBJ_I2C)
+ 	@ranlib $(STATIC)
+ #	@size   $(STATIC)
+ 
+ $(DYNAMIC):	$(OBJ)
+-	@echo "[Link (Dynamic)]"
++	@echo "[Link Dynamic]"
+ 	@$(CC) -shared -Wl,-soname,libwiringPi.so.1 -o libwiringPi.so.1.0 -lpthread $(OBJ)
+ 
+ i2c:	$(OBJ) $(OBJ_I2C)
+diff -ruNw wiring/wiringPi/wiringPi/wiringPi.c trunk/wiring/src/wiringPi/wiringPi.c
+--- srcc/wiringPi/wiringPi.c	2013-02-23 02:18:48.390400000 +0000
++++ copy/wiringPi/wiringPi.c	2013-02-23 20:24:16.979400000 +0000
+@@ -1119,7 +1119,7 @@
+ 
+     if (pid == 0)	// Child, exec
+     {
+-      execl ("/usr/local/bin/gpio", "gpio", "edge", pinS, modeS, (char *)NULL) ;
++      execl ("/usr/local/bin/hipi-gpio", "gpio", "edge", pinS, modeS, (char *)NULL) ;
+       return -1 ;	// Failure ...
+     }
+     else		// Parent, wait
+diff -ruNw wiring/wiringPi/wiringPi/wiringPiI2C.c trunk/wiring/src/wiringPi/wiringPiI2C.c
+--- srcc/wiringPi/wiringPiI2C.c	2013-02-23 02:18:48.400400000 +0000
++++ copy/wiringPi/wiringPiI2C.c	2013-02-23 03:56:18.005400000 +0000
+@@ -26,8 +26,8 @@
+ #include &lt;stdlib.h&gt;
+ #include &lt;fcntl.h>&gt;
+ #include &lt;sys/ioctl.h&gt;
+-#include &lt;linux/i2c-dev.h&gt;
++#include "../../../mylib/include/local-i2c-dev.h"
+ #include "wiringPi.h"
+ #include "wiringPiI2C.h"
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_gpio_wiring.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_gpio_wiring.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_gpio_bcm2835_i2c.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

@@ -1,0 +1,124 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Pin</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_mpl3115a2.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Pin</H2><p>HiPi::Pin provides an abstract GPIO Pin class that acts as a base for common implementations of the basic pin functions</p>
+<p>Currently there are two concrete classes that derive from HiPi::Pin:</p>
+<p><A HREF="hipi-bcm2835-pin.htm">HiPi::BCM2835::Pin</A></p>
+<p><A HREF="hipi-device-gpio-pin.htm">HiPi::Device::GPIO::Pin</A></p>
+<p>Classes based on HiPi::Pin inherit the following methods:</p>
+<h3>Object Methods</h3>
+<h5>$pin->value( [ $newval ] );</h5>
+<pre>    Returns the current level value of the pin 
+    ( 1 or 0 for high or low )
+    If the optional $newval is provided, sets the pin 
+    to that value if possible ( e.g. pin is an output ).</pre>
+<h5>$pin->mode( [ $newval ] );</h5>
+<pre>    Returns the current function of the pin.
+    This is one of the values:
+
+            RPI_PINMODE_INPT 
+            RPI_PINMODE_OUTP 
+            RPI_PINMODE_ALT0 
+            RPI_PINMODE_ALT1
+            RPI_PINMODE_ALT2 
+            RPI_PINMODE_ALT3 
+            RPI_PINMODE_ALT4 
+            RPI_PINMODE_ALT5
+     
+    You can import these constants into your namespace using
+
+    use HiPi::Constant qw( :raspberry );
+
+    If the optional $newval is provided, sets the pin 
+    function to that value.</pre>
+<h5>$pin->interrupt( [ $newmask ] );</h5>
+<pre>    Returns the current edge settings of the pin.
+    This is am or'd mask of the following values:
+
+            RPI_INT_NONE 
+            RPI_INT_FALL 
+            RPI_INT_RISE
+            RPI_INT_AFALL
+            RPI_INT_ARISE
+            RPI_INT_HIGH
+            RPI_INT_LOW
+     
+    You can import these constants into your namespace using
+
+    use HiPi::Constant qw( :raspberry );
+
+    If the optional $newmask is provided, sets the pin 
+    edge settings according to the mask to that value.
+
+    The HiPi::Device::GPIO::Pin implementation only supports
+    RPI_INT_NONE, RPI_INT_FALL, RPI_INT_RISE. A $newmask value
+    containing RPI_INT_AFALL, RPI_INT_ARISE, RPI_INT_HIGH
+    or RPI_INT_LOW will be translated to RPI_INT_FALL,
+    RPI_INT_RISE or both as appropriate.
+</pre>
+<h5>$pin->set_pud( $setting );</h5>
+<pre>    Sets the pull up / pull down resitor on this pin.
+    $setting can be one of
+
+            RPI_PUD_OFF 
+            RPI_PUD_UP 
+            RPI_PUD_DOWN
+     
+    You can import these constants into your namespace using
+
+    use HiPi::Constant qw( :raspberry );
+
+    Note: The settings last across restarts so it is up to
+    you to record settings applied and control resetting as 
+    you require.
+</pre>
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_mpl3115a2.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

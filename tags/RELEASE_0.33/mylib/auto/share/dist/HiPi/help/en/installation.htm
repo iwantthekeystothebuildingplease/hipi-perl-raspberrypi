@@ -1,0 +1,107 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>Installation and Upgrade</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+
+<A HREF="overview.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="release_notes.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>Installation and Upgrade</H2><p>HiPi is a Perl distribution that you install into the existing Perl on your Raspberry Pi. The build process includes installation of all dependencies.</p>
+<p>The build process will run <code> sudo apt-get update</code> as part of the installation process. The install process builds the distribution from source and must install its dependencies ( using the normal sudo apt-get install ). The install stage will often fail due to stale package information if apt-get update has not been run previously.</p>
+<p>This release of HiPi is tested against the 2013-02-09-wheezy-raspbian release. If you have an earlier release installed and do not run update and upgrade, your mileage may vary.</p>
+<h3>Installation</h3>
+<p>The install process requires root privileges to install its scripts and does so by calling 'sudo'. You must run either the automated install script or the standard Perl build process as a user with sudo privileges. By default the 'pi' user has these privileges when running Raspbian Wheezy.</p>
+<p>For a simple automated installation:</p>
+<pre>wget http://raspberry.znix.com/hipifiles/hipi-install
+perl hipi-install</pre>
+<p>If you want to download the latest tarball, read what the build process actually does (and perhaps you should as it executes some commands under sudo ) and run the standard Perl install steps:</p>
+<pre><I>... remove any prior download of HiPi source ...</I>
+
+rm hipi-latest.tar.gz
+rm -rf hipi-latest
+
+<I>... download source ...</I>
+
+wget http://raspberry.znix.com/hipifiles/hipi-latest.tar.gz
+
+<I>... extract source ...</I>
+
+tar -xvzf hipi-latest.tar.gz
+
+<I>... read source ... then ...</I>
+<I>... change into directory and do build / install ...</I>
+
+cd hipi-latest
+perl Build.PL
+perl Build
+perl Build test
+sudo perl Build install</pre>
+ 
+<p>Once installed you can run the <A HREF="control-app.htm">HiPi Control GUI</A> with the command</p>
+<p><code>gksudo hipi-control-gui</code></p>
+<p>It is necessary to run the control gui using gksudo (graphical sudo) as the HiPi Control GUI needs permissions to access the GPIO pins and device driver settings. You can use the HiPi Control GUI to set up your device drivers so that many of your other scripts do not need administrator (root) privileges to run.</p>
+<p>If you are installing HiPi and you know you don't want any GUI components and you don't want Wx to be installed, you can pass the --hipi-wx=0 option to either the auto install script or in the standard build process:</p>
+<pre>
+perl hipi-install --hipi-wx=0
+
+<I>  ... or ...
+</I>
+perl Build.PL --hipi-wx=0
+</pre>
+<h3>Updgrade</h3>
+<p>Once installed you can check for updates and upgrade to the latest version by running:</p>
+<pre>
+hipi-upgrade
+</pre>
+<p>If you have previously installed using the --hipi-wx=0 option but would now like to install Wx, run:</p>
+<pre>
+hipi-install
+</pre>
+
+
+
+
+
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+
+<A HREF="overview.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="release_notes.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

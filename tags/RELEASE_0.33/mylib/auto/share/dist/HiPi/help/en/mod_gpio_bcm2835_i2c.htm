@@ -1,0 +1,321 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::BCM2835::I2C</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_gpio.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="wiringpipatch.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="pin_modules.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::BCM2835::I2C</H2><p>The HiPi::BCM2835::I2C module provides direct access to the Broadcom I2C Serial peripheral.</p>
+<p>The module uses <A HREF="mod_gpio_bcm2835.htm">HiPi::BCM2835</A> and so requires administrator privileges to start. You can reduce priveleges near the very start of your program after HiPi::BCM2835 has initialised.</p>
+<p>The module implements a common set of <I><B>bus</B></I> methods also implemented by <A HREF="mod_device_i2c.htm">HiPi::Device::I2C</A> so you may write code that can use any of the three i2c backends available - bcm2835, smbus and i2c.</p>
+<p>The following interface modules can use HiPi::BCM2835::I2C as a backend and may contain code that helps with your own usage.</p>
+<p><A HREF="mod_interface_htadci2c.htm">HiPi::Interface::HTADCI2C</A><br />
+<A HREF="mod_interface_mcp23017.htm">HiPi::Interface::MCP23017</A><br />
+<A HREF="mod_interface_mpl3115a2.htm">HiPi::Interface::MPL3115A2</A><br />
+<A HREF="mod_interface_htbackpackv2.htm">HiPi::Interface::HTBackpackV2</A> <I>( as an optional backend )</I><br />
+</p>
+<p>You can also access your i2c peripherals through the kernel device driver. See: <A HREF="mod_device_i2c.htm">HiPi::Device::I2C</A></p>
+<p>For Model B Rev 2 and Model A boards you can gain access to a second I2C bus on the P5 header. See: <A HREF="topic_i2cbus_2.htm">Second I2C Bus</A>.</p>
+<p>The main advantage of HiPi::BCM2835::I2C is that it provides support for i2c devices that require a repeated start byte to be sent when reading from the device. For example the MPL3115A2 pressure and temperature sensor. Currently, repeated starts are not supported in the kernel driver.</p> 
+<h2>Class Methods</h2>
+<h5>HiPi::BCM2835::I2C->get_baudrate($channel);</h5>
+<pre>    Returns the current baudrate of the BSC peripheral in $channel.
+    $channel can be one of BB_I2C_PERI_0 or BB_I2C_PERI_1.
+    On model A and Model B Revision 2 boards BB_I2C_PERI_1 is broken
+    out on Raspberry Pins 3 and 5. For Model B Revsion 1 boards, 
+    BB_I2C_PERI_0 is broken out on these pins.
+    
+    Please not that the object method $obj->get_baudrate returns the 
+    baudrate that will be used in transfers using that particular
+    instance of HiPi::BCM2835::I2C. You may be able to apply different
+    bus speeds to different devices using individual instance 
+    settings. 
+</pre>
+<h5>HiPi::BCM2835::I2C->set_baudrate( $channel, $baudrate );</h5>
+<pre>    Sets the baudrate of the BSC peripheral in $channel.
+    $channel can be one of BB_I2C_PERI_0 or BB_I2C_PERI_1.
+    On model A and Model B Revision 2 boards BB_I2C_PERI_1 is broken
+    out on Raspberry Pins 3 and 5. For Model B Revsion 1 boards, 
+    BB_I2C_PERI_0 is broken out on these pins.
+
+    Common values for baudrate are:
+    
+       3816  - the minimum supported
+     100000  - the i2c standard
+     400000  - fast i2c standard
+    1000000  - seems to be the fastest reliable speed that this
+	       implementation supports. Of course, all the 
+	       devices on your bus must support this too.
+      32000  - the Broadcom I2C peripherals don't support
+	       clock stretching so if you have a device that
+	       employs this, a baudrate of 32000 ( or perhaps
+	       even lower ) will often allow the device to work.
+
+    Please not that the object method $obj->set_baudrate($newrate) sets
+    the baudrate that will be used in transfers using that particular
+    instance of HiPi::BCM2835::I2C. You may be able to apply different
+    bus speeds to different devices using individual instance 
+    settings.</pre>
+<h2>Exported Constants</h2>
+<pre>    use HiPi::BCM2835 qw( :i2c );
+
+    exports:
+        BB_I2C_PERI_0
+        BB_I2C_PERI_1
+        BB_I2C_RESULT_SUCCESS 
+        BB_I2C_RESULT_NACKRCV
+        BB_I2C_RESULT_CLOCKTO
+        BB_I2C_RESULT_DATAERR
+</pre>
+<h2>Object Constructor and Methods</h2>
+
+<h5>my $dev = HiPi::BCM2835::I2C->new( address => $devaddress );</h5>
+<pre>    $devaddress    address of the device ( e.g. 0x20 ) on the
+    default perpheral. The default perpheral is determined according 
+    to your Pi board revision.
+                   revision 1 = BB_I2C_PERI_0
+                   revision 2 = BB_I2C_PERI_1
+    
+    Returns a new instance of the HiPi::BCM2835::I2C class.
+    
+    You can specify which i2c channel to use in the constructor if
+    you wish using the key 'peripheral'.
+
+    my $dev = HiPi::BCM2835::I2C->new( 
+        peripheral => BB_I2C_PERI_0,
+        address    => 0x28 
+    );
+
+    Note that on revision 1 boards only BB_I2C_PERI_0 is available
+    while on revision 2 boards only BB_I2C_PERI_1 is available unless
+    you solder a connector to PAD 5. See <A HREF="topic_i2cbus_2.htm">Second I2C Bus</A>
+
+    For interface modules that use I2C, you may specify
+
+        backend => 'bcm2835'
+
+    in the constructor to use this module as a backend.</pre>
+<h5>$dev->get_baudrate();</h5>
+<pre>    Returns the baudrate that will be used in transfers using this 
+    particular instance of HiPi::BCM2835::I2C. You may be able to apply 
+    different bus speeds to different devices using individual instance 
+    settings. 
+</pre>
+<h5>$dev->set_baudrate( $baudrate );</h5>
+<pre>    Sets the baudrate that will be used in transfers using this 
+    particular instance of HiPi::BCM2835::I2C. You may be able to apply 
+    different bus speeds to different devices using individual instance 
+    settings for baudrate.
+
+    Common values for baudrate are:
+    
+       3816  - the minimum supported
+     100000  - the i2c standard
+     400000  - fast i2c standard
+    1000000  - seems to be the fastest reliable speed that this
+	       implementation supports. Of course, all the 
+	       devices on your bus must support this too.
+      32000  - the Broadcom I2C peripherals don't support
+	       clock stretching so if you have a device that
+	       employs this, a baudrate of 32000 ( or perhaps
+	       even lower ) will often allow the device to work.</pre>
+<h3>Busmode Methods</h3>
+<p>HiPi::BCM2835::I2C provides wrappers for its i2c calls. Note that <A HREF="mod_device_i2c.htm">HiPi::Device::I2C</A> also supports these methods so you may write code that works with backends i2c, smbus and bcm2835.</p>
+<h5>$dev->bus_write( @params );</h5>
+<pre>    The module provides the method bus_write as 
+    a generic call to the current backend.
+    
+    @params is a list of bytes to write to the currently
+    addressed device.</pre>
+<h5>$dev->bus_write_error( @params );</h5>
+<pre>    The module provides the method bus_write_error as 
+    a generic call to the current backend.
+    
+    @params is a list of bytes to write to the currently
+    addressed device. 
+
+    The bus_write_error method is error tolerant and is 
+    generally used when an external device has a soft reset 
+    or reboot call that exits the i2c conversation when 'reset' 
+    is set. The standard i2c_write command will return an 
+    error in this case as the slave did not acknowledge the 
+    reset byte.</pre>
+<h5>$dev->bus_read( $cmdval, $numbytes );</h5>
+<pre>    The module provides the method bus_read as 
+    a generic call to the current backend.
+
+    $cmdval is the value ( normally a register address
+    on the slave) that you wish to read from.
+
+    $numbytes is the number of bytes you wish to read.
+
+    Returns an array of bytes $numbytes long.</pre>
+<h5>$dev->bus_read_bits( $cmdval, $numbytes );</h5>
+<pre>    The module provides the method bus_read_bits as 
+    a generic call to the current backend.
+
+    Returns an array of bits 8 * $numbytes long from the
+    register in $cmdval.
+
+    If a single byte is read that has the value 0b01001100
+    then the bits in the array will have the values:
+    
+    $return[7] == 0
+    $return[6] == 1
+    $return[5] == 0
+    $return[4] == 0
+    $return[3] == 1
+    $return[2] == 1
+    $return[1] == 0
+    $return[0] == 0
+
+    Usage:
+    
+    my @bits = $dev->bus_read_bits(0xC1, 1);
+    $bits[3] = 1;
+    dev->bus_write_bits(0xC1, @bits);</pre>
+
+<h5>$dev->bus_write_bits( $cmdval, @bits );</h5>
+<pre>    The module provides the method bus_write_bits as 
+    a generic call to the current backend.
+
+    Writes a number of bytes equal to @bits / 8 to the 
+    register in $cmdval.
+
+    For the array of 8 bits:
+
+    my @bits = ( 1,1,1,0,0,0,0,1 )
+
+    the value 0b10000111 will be written to $cmdval.
+
+    Usage:
+    
+    my @bits = $dev->bus_read_bits(0xC1, 1);
+    $bits[3] = 1;
+    dev->bus_write_bits(0xC1, @bits);
+</pre>
+<h3>I2C Methods</h3>
+
+<h5>$dev->i2c_write( @params );</h5>
+<pre>    @params is a list of bytes to write to the slave device.
+    Normally, the first (and perhaps only) item in the list will 
+    be a register address on the slave.
+    
+    Use of the busmode wrapper methods is recommended.</pre>
+<h5>$dev->i2c_write_error( @params );</h5>
+<pre>    @params is a list of bytes to write to the slave device.
+    Normally, the first (and perhaps only) item in the list will 
+    be a register address on the slave.
+
+    The i2c_write_error method is error tolerant and is generally 
+    used when an external device has a soft reset or reboot call 
+    that exits the i2c conversation when 'reset' is set.
+    The standard i2c_write command will return an error in this case
+    as the slave did not acknowledge the reset byte.</pre>
+<h5>$dev->i2c_read( $numbytes );</h5>
+<pre>    Reads a number of bytes $numbytes read from the current
+    register address in the slave (normally set using a previous
+    write).
+
+    Returns an array of bytes containing $numbytes items.
+    
+    Use of the busmode wrapper methods is recommended.</pre>
+<h5>$dev->i2c_read_register( $register, $numbytes );</h5>
+<pre>    Reads a number of bytes $numbytes read from the register 
+    address in $register.
+
+    Combines the write of the register address with the subsequent
+    read in a single transaction.
+
+    Returns an array of bytes containing $numbytes items.
+    
+    Use of the busmode wrapper methods is recommended.</pre>
+<h5>$dev->i2c_read_register_rs( $register, $numbytes );</h5>
+<pre>    Reads a number of bytes $numbytes read from the register 
+    address in $register.
+
+    Combines the write of the register address with the subsequent
+    read in a single transaction.
+
+    Returns an array of bytes containing $numbytes items.
+    
+    This method is designed for slaves that require sending a 
+    repeated start before a read can commence. It is used in place 
+    of i2c_read_register for such devices. 
+
+    <A HREF="mod_interface_mpl3115a2.htm">HiPi::Interface::MPL3115A2</A> which provides access to a popular
+    temperature and pressure sensor requires this method.
+</pre>
+<h3>Timing Methods</h3>
+<h5>$dev->delay( $millis );</h5>
+<pre>    $millis  Delay in milliseconds
+
+    Delays for the specified number of milliseconds. Uses nanosleep(), 
+    and therefore does not use CPU until the time is up. However, you are 
+    at the mercy of nanosleep(). From the manual for nanosleep(): If the 
+    interval specified in req is not an exact multiple of the granularity 
+    underlying clock (see time(7)), then the interval will be rounded up 
+    to the next multiple. Furthermore, after the sleep completes, there 
+    may still be a delay before the CPU becomes free to once again execute 
+    the calling thread.</pre> 
+<h5>$dev->delayMicroseconds( $micros );</h5>
+<pre>    $micros  Delay in microseconds
+
+    Delays for the specified number of microseconds. Uses a combination of 
+    nanosleep() and a busy wait loop on the BCM2835 system timers, However, 
+    you are at the mercy of nanosleep(). From the manual for nanosleep(): 
+    If the interval specified in req is not an exact multiple of the
+    granularity underlying clock (see time(7)), then the interval will be 
+    rounded up to the next multiple. Furthermore, after the sleep completes, 
+    there may still be a delay before the CPU becomes free to once again 
+    execute the calling thread. For times less than about 450 microseconds, 
+    uses a busy wait on the System Timer. It is reported that a delay of 0 
+    microseconds on RaspberryPi will in fact result in a delay of about 
+    80 microseconds. Your mileage may vary.
+</pre>
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_gpio.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="wiringpipatch.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="pin_modules.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

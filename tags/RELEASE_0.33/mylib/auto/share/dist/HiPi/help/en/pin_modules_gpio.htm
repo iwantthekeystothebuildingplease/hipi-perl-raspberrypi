@@ -1,0 +1,98 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Device::GPIO::Pin</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="pin_modules.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="pin_modules_base.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="pin_modules_bcm2835.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Device::GPIO::Pin</H2><p>HiPi::Device::GPIO::Pin provides an implementation of <A HREF="pin_modules_base.htm">HiPi::Pin</A> for the <A HREF="mod_device_gpio.htm">HiPi::Device::GPIO</A> module.</p>
+<p>The module inherits most of its methods from <A HREF="pin_modules_base.htm">HiPi::Pin</A>.</p>
+<p>See Also</p>
+<UL>
+<li><A HREF="pin_modules_wiring.htm">HiPi::Wiring::Pin</A>
+<li><A HREF="pin_modules_bcm2835.htm">HiPi::BCM2835::Pin</A>
+</UL>
+<h3>Example Usage</h3>
+<pre>
+use 5.14.0; # for say
+use HiPi::Device::GPIO;
+use HiPi::Constant qw( :raspberry );
+
+my $dev = HiPi::Device::GPIO->new();
+$dev->export_pin( RPI_PAD1_PIN_11 );
+.....
+my $pin  = $dev->get_pin( RPI_PAD1_PIN_11 );
+my $mode = $pin->mode();
+
+if( $mode & RPI_PINMODE_OUTP ) {
+    # set high
+    $pin->value(1);
+} elsif(  $mode & RPI_PINMODE_INPT ) { 
+    say q(Current Pin Value is :) . $pin->value();
+
+    # set rising edge interrupt
+    $pin->interrupt( RPI_INT_RISE );
+}
+
+# As a convenience, the HiPi::Device::GPIO method export_pin also
+# returns a HiPi::Device::GPIO::Pin object;
+
+my $dev = HiPi::Device::GPIO->new();
+my $pin = $dev->export_pin( RPI_PAD1_PIN_11 );
+
+</pre>
+<h3>Custom Methods</h3>
+As the kernel device driver for the GPIO allows you to reverse the
+high / low logic for a pin, the module provides a method to control
+that.
+<h5>$pin->active_low( [ $onoff ] );</h5>
+<pre>    Returns the current active low setting for the pin.
+    Either 1 or 0 for on or off.
+    
+    If the optional param $onoff is supplied ( 1 or 0 )
+    that setting is applied to the pin.
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="pin_modules.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="pin_modules_base.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="pin_modules_bcm2835.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

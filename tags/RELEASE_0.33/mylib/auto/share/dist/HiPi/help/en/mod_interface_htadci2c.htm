@@ -1,0 +1,107 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Interface::HTADCI2C</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_hd44780.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_interface_htbackpackv2.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Interface::HTADCI2C</H2><p>This module provides an interface to the HobbyTronics HTADCI2C analog to digital converter with i2c interface.</p>
+<p>It uses <A HREF="mod_device_i2c.htm">HiPi::Device::I2C</A> as a backend</p>
+<p><B>IMPORTANT</B>: I have found that this device employs clock stretching and requires an i2c bus baudrate of 32000.<p></p>See <A HREF="topic_i2cdev.htm">I2C Device Driver</A>.</p>
+<h2>Object Constructor and Methods</h2>
+<h5>my $adc = HiPi::Interface::HTADCI2C->new( %params );</h5>
+<pre>    Returns a new instance of the HiPi::Interface::HTADCI2C class.
+
+    Optional key => values pairs in %params and their defaults
+
+    address     => 0x28,
+    devicename  => ( RPi board rev == 1 ) ? '/dev/i2c-0' : '/dev/i2c-1',
+    res         => 1,
+    fil1        => 0,
+    fil0        => 0,
+
+    The keys res, fil1 and fil0 correspond to the configuration bytes
+    described in the adci2c datasheet.
+
+    when : res   == 1 - device has  8 bit resolution
+           res   == 0 - device has 10 bit resolution
+           fil0  == 1 - use complimentary feature
+
+    ( fil1 currently unused according to datasheet )
+
+    Example usage with 10 bit resolution and complimentary feature
+    
+    my $adc = HiPi::Interface::HTADCI2C->new( res => 1, fil0 => 1 );</pre>
+<h5>my @vals = $adc->read_register();</h5>
+<pre>    Returns an array containing the 10 values read from all of the 
+    connectors on the adci2c.
+
+    The values will always be between 0 and 1020. When the device is
+    in 8 bit mode, values are shifted to their 10 bit equivalent.</pre>
+<h5>my $val = $adc->read_channel( $channel );</h5>
+<pre>    $channel - the number of the channel to read ( 0 - 9 )
+
+    A convenience method that allows retrieving the value for a
+    single channel. 
+    
+    Calls read_register internally and extracts the required value.</pre>
+<h5>my @vals = $adc->read_channels( @channels );</h5>
+<pre>    @channels - An array specifying the channels to retrieve.
+
+    A convenience method that allows retrieving the values for a
+    number of specified channels. The return @vals will contain
+    a number of values equal to the number of @channels requested
+    in the order requested.
+
+    e.g. my @vals = $adc->read_channels(0,5,7);
+    print $vals[0] . ' is value for channel 0' .qq(n);
+    print $vals[1] . ' is value for channel 5' .qq(n);
+    print $vals[2] . ' is value for channel 7' .qq(n);
+    
+    Calls read_register internally and extracts the required values.
+
+</pre></FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_interface.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_interface_hd44780.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_interface_htbackpackv2.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

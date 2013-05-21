@@ -1,0 +1,104 @@
+#!/usr/bin/perl
+
+#########################################################################################
+# Description:  Installer for HiPi modules
+# Created       Mon Mar 11 20:27:35 2013
+# svn id        $Id:$
+# Copyright:    Copyright (c) 2013 Mark Dootson
+# Licence:      This work is free software; you can redistribute it and/or modify it 
+#               under the terms of the GNU General Public License as published by the 
+#               Free Software Foundation; either version 3 of the License, or any later 
+#               version.
+#########################################################################################
+
+use strict;
+use warnings;
+use LWP::Simple qw( :DEFAULT $ua );
+
+our $VERSION ='0.33';
+
+our $rooturl   = 'http://hipi-perl-raspberrypi.googlecode.com/files';
+our $stableurl = 'http://raspberrypi.znix.com/hipifiles/latest.txt';
+our $tmproot   = '/var/tmp/_hipiinstall';
+
+sub get_args {
+    if( @ARGV ) {
+        my $argstr = join('', @ARGV);
+        $argstr =~ s/\s+//g;
+        return $argstr;
+    } else {
+        return '';
+    }
+}
+
+sub get_sudo_prog {
+    if( $< ) {
+        # not root
+        my $cansudo = ( system('sudo -V >/dev/null 2>&1') ) ? 0 : 1;
+        if( $cansudo ) {
+            return 'sudo ';
+        } else {
+            exitclean('HiPi installer requires access to root permissions to install modules, scripts and dependencies. Run the script as a user with sudo permissions.');
+        }
+    } else {
+        return '';
+    }
+}
+
+sub plog { print $_[0] . qq(\n); }
+
+sub do_install {
+    my $sudo = get_sudo_prog();
+    plog('Creating temporary directory');
+    qx(rm -rf $tmproot) if -e $tmproot;
+    mkdir($tmproot, 0777) or exitclean('could not create temporary install directory');
+    chdir($tmproot) or exitclean('could not enter temporary install directory');
+    
+    my ($sourcename, $sourcefile, $sourceurl) = get_latest_version_file();
+    plog('Downloading latest source');
+    system(qq(rm -rf $sourcename));
+    system(qq(rm $sourcefile));
+    system(qq(wget $sourceurl)) and exitclean('Failed to download latest tarball');
+    system(qq(tar -xvzf $sourcefile)) and exitclean('Failed to extract latest tarball');
+    chdir($sourcename) or exitclean('could not enter extracted source directory');
+    my $bldargs = get_args();
+    
+    my $bldcmd = qq($^X Build.PL $bldargs);
+    system($bldcmd) and exitclean('Failed to run perl Build.PL');
+    system(qq($^X Build)) and exitclean('Failed to run perl Build');
+    system(qq($^X Build test)) and exitclean('Failed to run perl Build test');
+    system(qq(${sudo}$^X Build install)) and exitclean('Failed to run perl Build install');
+    plog('HiPi Modules have been installed');
+    exitclean();
+}
+
+sub get_latest_version_file {
+    my $content;
+    {
+        $ua->env_proxy;
+        $ua->timeout(10);    
+        $content = get($stableurl);
+    }
+    if(!defined($content) ) {
+        exitclean('The HiPi web site is unavailable or could not be reached.');
+    }
+    chomp($content);
+    my $sourcename = qq(HiPi-${content});
+    my $sourcefile = $sourcename . '.tar.gz';
+    my $sourceurl = $rooturl . '/' . $sourcefile;
+    
+    return ($sourcename, $sourcefile, $sourceurl);
+}
+
+sub exitclean {
+    my( $die ) = @_;
+    qx(rm -rf $tmproot) if -e $tmproot;
+    if(defined($die)) {
+        die $die;
+    }
+    exit(0);
+}
+
+do_install();
+
+1;

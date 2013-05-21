@@ -1,0 +1,133 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Device::GPIO</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_device.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_device.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_device_i2c.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Device::GPIO</H2><p>The HiPi::Device::GPIO module provides access to the kernel driver for the GPIO.</p>
+<p>See : <A HREF="topic_gpiodev.htm">GPIO Device Driver</A></p>
+<p>Many of the methods expect a GPIO Pin Id as a parameter. You can use
+the pin id constants exported by HiPi::Constant module if you wish.</p>
+<pre>use HiPi::Constant qw( :raspberry );
+
+# this will export, amongst other things, the following 
+# pin constants that you can pass to the HiPi::BCM2835 
+# methods and functions
+
+    RPI_PAD1_PIN_3 
+    RPI_PAD1_PIN_5 
+    RPI_PAD1_PIN_7 
+    RPI_PAD1_PIN_8 
+    RPI_PAD1_PIN_10 
+    RPI_PAD1_PIN_11 
+    RPI_PAD1_PIN_12 
+    RPI_PAD1_PIN_13
+    RPI_PAD1_PIN_15 
+    RPI_PAD1_PIN_16 
+    RPI_PAD1_PIN_18 
+    RPI_PAD1_PIN_19
+    RPI_PAD1_PIN_21 
+    RPI_PAD1_PIN_22 
+    RPI_PAD1_PIN_23 
+    RPI_PAD1_PIN_24 
+    RPI_PAD1_PIN_26
+ 
+# on Model B Revision 2 or a Model A boards
+# then constants for Pad 5 are also exported
+
+    RPI_PAD5_PIN_3 
+    RPI_PAD5_PIN_4 
+    RPI_PAD5_PIN_5 
+    RPI_PAD5_PIN_6
+
+# the constant RPI_BOARD_REVISION is also exported
+# under the :raspberry tag and will be defined as 
+# 1 or 2 depending on your board revision</pre>
+<h2>Object Constructor and Methods</h2> 
+<h5>my $dev = HiPi::Device::GPIO->new();</h5>
+<pre>    Creates a new object instance of class HiPi::Device::GPIO;</pre>
+<h5>my $status = $dev->pin_status( $pinid );</h5>
+<pre>    $pindid   GPIO Pin Number
+
+    Returns the current status of the pin which indicates
+    whether it is currently exported by the kernel driver.
+    Return value is one of 
+
+          DEV_GPIO_PIN_STATUS_NONE 
+          DEV_GPIO_PIN_STATUS_EXPORTED
+
+    You may import these constants into your namespace with
+
+    use HiPi::Device::GPIO qw( :pinstatus );</pre>
+<h5>$dev->export_pin( $pinid );</h5>
+<pre>    $pindid   GPIO Pin Number
+
+    Will export the specified pin id so that it may be accessed
+    using the kernel device driver. The script user must have 
+    permissions to export device driver pins ( probably 
+    conferred by membership of gpio group).
+    
+    The method returns a <A HREF="pin_modules_gpio.htm">HiPi::Device::GPIO::Pin</A> object for the 
+    specified pin number. (see also $dev->get_pin( $pinid ) ).
+    
+    see : <A HREF="topic_gpiodev.htm">GPIO Device Driver</A></pre>
+<h5>$dev->unexport_pin( $pinid );</h5>
+<pre>    $pindid   GPIO Pin Number
+
+    Will unexport the specified pin id so that it may mo loner 
+    be accessed using the kernel device driver. The script user 
+    must have permissions to unexport device driver pins.
+    
+    see : <A HREF="topic_gpiodev.htm">GPIO Device Driver</A></pre>
+<h5>my $pinobj = $dev->get_pin( $pinid );</h5>
+<pre>    $pinid  GPIO Pin Number
+
+    returns an object instance of <A HREF="pin_modules_gpio.htm">HiPi::Device::GPIO::Pin</A>
+
+</pre>
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_device.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_device.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_device_i2c.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

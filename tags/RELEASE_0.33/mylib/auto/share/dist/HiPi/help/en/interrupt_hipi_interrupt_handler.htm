@@ -1,0 +1,149 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Interrupt::Handler</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="interrupt.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="interrupt_hipi_interrupt.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="interrupt_hipi_interrupt_message.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Interrupt::Handler</H2><p>This module provides access to interrupt handling and inter thread communication in your main thread.</p>
+<p>The main interrupt module, <A HREF="interrupt_hipi_interrupt.htm">HiPi::Interrupt</A>, must be loaded at the beginning of your script. You may then either create your own class deriving from HiPi::Interrupt::Handler to handle interrupts or you can use an instance of the class directly providing one or more callback code references.</p>
+<p>Working examples are provided in:</p>
+<p>
+<UL>
+
+<li><A HREF="interrupt_example_derived.htm">Derived Class Example</A>
+<li><A HREF="interrupt_example_callback.htm">Callback Example</A>
+<li><A HREF="interrupt_example_mixed.htm">Mixed Handlers Example</A>
+
+</UL>
+</p>
+<p>You choose to deal with notifications either by registering callbacks with an instance of HiPi::Interrupt::Handler or you may create your own class deriving from HiPi::Interrupt::Handler and override its methods.</p>
+
+<h2>Constructor</h2>
+
+<h3>my $handler = HiPi::Interrupt::Class->new();</h3>
+
+<h2>Methods</h2>
+<h3>$handler->add_pin($pin);<br>
+$handler->add_pin($pinnumber, $pinclass);</h3>
+<p>Method add_pin takes either a pin object inheriting from class HiPi::Pin or a GPIO pin number and a pinclass defining how the pin is managed ( <B>gpio</B> for sysfs HiPi::Device::GPIO pins, <B>bcmd</B> for HiPi::BCM2835 pins and <B>wire</B> for HiPi::Wiring pins.</p> 
+<p>The pin will be polled for interrupts. It is assumed that all of the necessary settings will have been applied to the pin prior to a call to $handler->add_pin.</p>
+
+<h3>$handler->remove_pin($pin);<br>
+$handler->remove_pin($pinnumber);</h3>
+<p>Removes the pin from interrupt polling.</p>
+
+<h3>$handler->stop;</h3>
+<p>Stops and exits the $handler poll loop. Call this to close your application.</p>
+
+<h3>$handler->poll;</h3>
+<p>Call this to begin polling for pin interrupts. The method will not return until your code calls $handler->stop. After calling $handler->poll, your code execution continues in the main application thread by calls to methods in your custon HiPi::Interrupt::Handler class or through callbacks you have registered with your $handler instance.</p>
+
+<h3>$handler->register_callback( $cbname, $coderef );</h3>
+<p>Rather than create your own class derived from HiPi::Interrupt::Handler, you can create an instance of HiPi::Interrupt::Handler directly and register callback subroutines to receive notifications. The code reference specified in $coderef will be called with the same parameters described in the Notification Methods below for the relevant $cbname. Possible values for $cbname are <br><I>start, continue, interrupt, error, add, remove, stop</I>.</p>
+
+<h3>$handler->get_timestamp();</h3>
+<p>A convenience method that returns milliseconds since the Unix epoch. It is a simple wrapper around Time::HiRes::gettimeofday()</p>
+
+<h2>Overridable Notification Methods</h2>
+<h3>on_start ( $handler )</h3>
+<p>on_start is called once immediately after $handler->poll is called.</p>
+<p><dl>
+<p><dd><b>$handler</b>  Your HiPi::Interrupt::Handler instance.</dd></p></dl>
+
+<h3>on_add ( $handler, $message )</h3>
+<p>Called with the result of a call to $handler->add_pin</p>
+<p><dl>
+<p><dd><b>$handler</b>  Your HiPi::Interrupt::Handler instance.</dd></p>
+<p><dd><b>$message</b>  An instance of <A HREF="interrupt_hipi_interrupt_message.htm">HiPi::Interrupt::Message</A></dd></p>
+</dl>
+
+<h3>on_remove ( $handler, $message )</h3>
+<p>Called with the result of a call to $handler->remove_pin</p>
+<p><dl>
+<p><dd><b>$handler</b>  Your HiPi::Interrupt::Handler instance.</dd></p>
+<p><dd><b>$message</b>  An instance of <A HREF="interrupt_hipi_interrupt_message.htm">HiPi::Interrupt::Message</A></dd></p>
+</dl>
+
+<h3>on_interrupt ( $handler, $message )</h3>
+<p>Called with the result polling for interrupts on the monitored pins.</p>
+<p><dl>
+<p><dd><b>$handler</b>  Your HiPi::Interrupt::Handler instance.</dd></p>
+<p><dd><b>$message</b>  An instance of <A HREF="interrupt_hipi_interrupt_message.htm">HiPi::Interrupt::Message</A></dd></p>
+</dl>
+
+<h3>on_continue ( $handler, $actions )</h3>
+<p>Called periodically so that you may run code when no interrupts are occuring. Can be treated as a 'heartbeat' method. You can use $handler->get_timestamp to return milliseconds since the Unix epoch and store the value if you wish to carry out actions at a specific time offset.</p>
+<p><dl>
+<p><dd><b>$handler</b>  Your HiPi::Interrupt::Handler instance.</dd></p>
+<p><dd><b>$actions</b>  The number of interrupts handled since the last call to on_continue.</dd></p>
+</dl>
+
+<h3>on_error ( $handler, $message )</h3>
+<p>Called when an error occurs that is not specific to a particular $handler call.</p>
+<p><dl>
+<p><dd><b>$handler</b>  Your HiPi::Interrupt::Handler instance.</dd></p>
+<p><dd><b>$message</b>  An instance of <A HREF="interrupt_hipi_interrupt_message.htm">HiPi::Interrupt::Message</A></dd></p>
+</dl>
+
+<h3>on_stop ( $handler, $message )</h3>
+<p>Called with the result of a call to $handler->stop</p>
+<p><dl>
+<p><dd><b>$handler</b>  Your HiPi::Interrupt::Handler instance.</dd></p>
+<p><dd><b>$message</b>  An instance of <A HREF="interrupt_hipi_interrupt_message.htm">HiPi::Interrupt::Message</A></dd></p>
+</dl>
+
+
+
+
+
+
+
+
+ 
+
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="interrupt.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="interrupt_hipi_interrupt.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="interrupt_hipi_interrupt_message.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>

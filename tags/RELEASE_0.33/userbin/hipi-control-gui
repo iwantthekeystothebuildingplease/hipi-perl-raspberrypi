@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+
+#########################################################################################
+# Description:  HiPi GUI Control
+# Created       Mon Feb 25 13:38:42 2013
+# svn id        $Id:$
+# Copyright:    Copyright (c) 2013 Mark Dootson
+# Licence:      This work is free software; you can redistribute it and/or modify it 
+#               under the terms of the GNU General Public License as published by the 
+#               Free Software Foundation; either version 3 of the License, or any later 
+#               version.
+#########################################################################################
+
+use strict;
+use warnings;
+
+our $VERSION ='0.33';
+
+use HiPi::Utils qw( is_raspberry );
+
+if( is_raspberry && $<) {
+    my $msg = qq(\nThis script requires administrator permissions to run. );
+    $msg .= qq(You must be in a graphical environment. Run the script using:);
+    $msg .= qq(\n\n\tgksudo hipi-control-gui\n\n);
+    print $msg;
+    exit(0);
+}
+
+require HiPi::Apps::Control;
+my $app = HiPi::Apps::Control->new;
+$app->MainLoop;
+
+1;

@@ -1,0 +1,123 @@
+
+
+<HTML>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>HiPi::Utils</title></head>
+
+<BODY TOPMARGIN=4 BGCOLOR=#FFFFFF TEXT=#000000 VLINK=#0000CC LINK=#0000CC ALINK=#0000CC>
+<FONT FACE="Arial, Lucida, Helvetica" >
+
+<TABLE WIDTH="100%" ALIGN=CENTER CELLPADDING=1 CELLSPACING=0>
+<TR>
+<TD WIDTH="100%" ALIGN=CENTER>
+
+
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_util.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_util_lang.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util_class.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</TD>
+</TR>
+<TR>
+<TD COLSPAN=2 HEIGHT=2 BGCOLOR="#C0C0C0">
+</TD>
+</TR>
+</TABLE>
+
+<H2>HiPi::Utils</H2><p>This module provides some utilities for common calls in the HiPi modules code.</p>
+<p>You may find them useful in your own code.</p>
+<h3>Example Usage</h3>
+<pre>
+use HiPi::Utils qw(
+    get_groups
+    create_system_group
+    create_user_group
+    group_add_user
+    group_remove_user
+    home_directory
+    is_windows
+    is_unix
+    is_raspberry
+    is_mac
+);
+ </pre>
+<h3>Functions</h3>
+<h5>HiPi::Utils::is_raspberry();</h5>
+<pre>    I like to be able to run my code on none-raspberry
+    platforms during development.
+    This gives me a quick and consistent way of
+    checking if the code is running on a Raspberry Pi.
+
+    For the same reason the following are implemented
+    
+    is_windows
+    is_unix
+    is_raspberry
+    is_mac</pre>
+<h5>HiPi::Utils::home_directory();</h5> 
+<pre>    In the same spirit as is_raspberry, is_windows etc.,
+    this gives me a correct home directory on any platform.</pre>
+<h5>HiPi::Utils::get_groups();</h5>
+<pre>    returns a hash reference where the keys
+    are all the groups on the system and the
+    values are a reference to a hash containing
+    the gid and an array reference of member names.
+
+    i.e.
+
+    return { 
+       groupname1 => { gid => $gid1, members => \@members1 },
+       groupname2 => { gid => $gid2, members => \@members2 },
+       .......
+    };</pre>
+<h5>HiPi::Utils::create_system_group($groupname, $gid);</h5>
+<pre>    A thin wrapper around
+    groupadd -f -r -g $gid $groupname
+    if $gid is undefined calls
+    groupadd -f -r $groupname</pre>
+<h5>HiPi::Utils::create_user_group($groupname, $gid);</h5>
+<pre>    A thin wrapper around
+    groupadd -f -g $gid $groupname
+    if $gid is undefined calls
+    groupadd -f $groupname</pre>
+<h5>HiPi::Utils::group_add_user($groupname, $username);</h5>
+<pre>    A thin wrapper around
+    gpasswd -a $username $groupname</pre>
+<h5>HiPi::Utils::group_remove_user($groupname, $username);</h5>
+<pre>    A thin wrapper around
+    gpasswd -d $username $groupname</pre>
+<h5>HiPi::Utils::drop_permissions_name($username,$groupname);</h5>
+<pre>    Changes uid, effective uid, gid and effective gid of the
+    running process to the $username and $groupname specified.
+    This is very useful if you are using a module or methods 
+    ( such as HiPi::BCM2835 ) which require root level permissions
+    during initialisation. Once you have initialised you can 
+    reduce to a less privileged user and group greatly enhancing
+    the security of your process. 
+</pre>
+</FONT>
+<br>
+<p>
+<br>
+<hr>
+<br>
+<center>
+<A HREF="contents.htm"><img align=center src="home.png" BORDER=0 ALT="Contents"></A>
+
+
+<A HREF="mod_util.htm"><img align=center src="up.png" BORDER=0 ALT="Up"></A>
+
+<A HREF="mod_util_lang.htm"><img align=center src="back.png" BORDER=0 ALT="Previous"></A>
+
+<A HREF="mod_util_class.htm"><img align=center src="forward.png" BORDER=0 ALT="Next"></A>
+</center>
+
+<HR>
+<br>
+<center><FONT FACE="Arial, Lucida, Helvetica" size="2" color="#000080">HiPi Modules Copyright &#169; 2013 Mark Dootson</font></center>
+</BODY></HTML>
