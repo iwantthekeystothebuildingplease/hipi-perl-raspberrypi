@@ -1,0 +1,1 @@
+HiPi distribution contains Perl modules to interface with the Raspberry Pi GPIO and SOC peripherals on the Raspbian Linux distribution.
